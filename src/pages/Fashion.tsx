@@ -1,8 +1,43 @@
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { fashionIntro, looks, type Look } from "../data/fashion";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
+
+/** 다크 3D 오브제 배경 (three는 패션 페이지에서만 lazy-load) */
+function Hero3D() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    let dispose = () => {};
+    let onScroll: (() => void) | null = null;
+    let alive = true;
+    import("../lib/fashionThree")
+      .then(({ mountFashion }) => {
+        if (!alive || !el) return;
+        const api = mountFashion(el);
+        dispose = api.dispose;
+        onScroll = () =>
+          api.setScroll(window.scrollY / Math.max(1, window.innerHeight));
+        window.addEventListener("scroll", onScroll, { passive: true });
+        onScroll();
+      })
+      .catch(() => {});
+    return () => {
+      alive = false;
+      if (onScroll) window.removeEventListener("scroll", onScroll);
+      dispose();
+    };
+  }, []);
+  return (
+    <div
+      ref={ref}
+      className="absolute inset-0 [mask-image:radial-gradient(circle_at_57%_40%,black_60%,transparent_94%)]"
+    />
+  );
+}
 
 function LookCard({ look }: { look: Look }) {
   const wide = look.span === "wide";
@@ -44,18 +79,18 @@ function LookCard({ look }: { look: Look }) {
 export function Fashion() {
   return (
     <main className="min-h-screen bg-[#100f0e] text-bone">
-      {/* ───────── HERO (full-bleed dark) ───────── */}
+      {/* ───────── HERO (3D, full-bleed dark) ───────── */}
       <section className="relative flex min-h-[100svh] items-end overflow-hidden">
-        <motion.img
-          src={fashionIntro.hero}
-          alt=""
-          initial={{ scale: 1.12, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 1.8, ease: EASE }}
-          className="absolute inset-0 h-full w-full object-cover object-center"
+        {/* 미세 노이즈 그레인 + 비네팅 */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(120% 90% at 60% 35%, #1a1816 0%, #100f0e 55%, #0a0908 100%)",
+          }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/30" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent" />
+        <Hero3D />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0a0908] via-transparent to-transparent" />
 
         <div className="relative z-10 w-full px-5 pb-14 sm:px-9 sm:pb-20">
           <div className="mx-auto max-w-[1500px]">
