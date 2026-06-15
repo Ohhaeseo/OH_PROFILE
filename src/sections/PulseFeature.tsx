@@ -154,12 +154,12 @@ export function PulseFeature() {
 
         {/* 기술 파이프라인 */}
         <Reveal className="mt-16">
-          <div className="overflow-hidden rounded-[1.75rem] border border-sand bg-white/60 p-5 shadow-[0_40px_90px_-50px_rgba(74,58,44,0.45)] sm:p-8">
+          <div className="mx-auto max-w-[760px] overflow-hidden rounded-[1.5rem] border border-sand bg-white/60 p-5 shadow-[0_40px_90px_-50px_rgba(74,58,44,0.45)] sm:p-7">
             <img
               src={pulse.pipeline}
               alt="PULSE 기술 아키텍처 파이프라인"
               loading="lazy"
-              className="mx-auto w-full max-w-[920px]"
+              className="mx-auto w-full max-w-[600px]"
             />
             <p className="mt-4 text-center text-[12px] text-mocha">
               React · Spring Boot · FastAPI로 이어지는 분석–생성–렌더링 파이프라인

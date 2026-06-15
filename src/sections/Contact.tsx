@@ -32,9 +32,10 @@ export function Contact() {
         </Reveal>
 
         <Reveal delay={0.1}>
-          <p className="mx-auto mt-8 max-w-xl text-[15px] leading-relaxed text-cream/70">
-            다양한 기술적 도전을 넘어, 사용자의 경험을 설계하는 개발자로
-            성장하겠습니다. 함께 만들고 싶은 이야기가 있다면 언제든 연락 주세요.
+          <p className="mx-auto mt-9 max-w-md text-[15px] leading-loose text-cream/70 sm:text-base">
+            함께 만들고 싶은 이야기가 있다면,
+            <br className="hidden sm:block" />
+            언제든 편하게 연락 주세요.
           </p>
         </Reveal>
 

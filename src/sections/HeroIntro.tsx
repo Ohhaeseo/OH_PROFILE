@@ -105,23 +105,23 @@ function DesktopStage() {
           <span className="h-px w-8 bg-caramel/50" />
         </motion.div>
 
-        {/* 포트레이트 (스크롤로 이동) */}
+        {/* 포트레이트 (스크롤로 이동, 하단 자연스러운 페이드) */}
         <motion.img
           src={PORTRAIT}
           alt="오해서"
           style={{ x, y, scale }}
-          className="relative z-10 h-[74vh] w-auto object-contain drop-shadow-[0_30px_60px_rgba(74,58,44,0.25)]"
+          className="relative z-10 h-[74vh] w-auto object-contain drop-shadow-[0_30px_60px_rgba(74,58,44,0.22)] [mask-image:linear-gradient(to_bottom,#000_66%,transparent_96%)] [-webkit-mask-image:linear-gradient(to_bottom,#000_66%,transparent_96%)]"
         />
 
         {/* 이름 오버레이 (페이드아웃) */}
         <motion.div
           style={{ opacity: heroOpacity }}
-          className="pointer-events-none absolute bottom-[13%] left-0 right-0 z-20 text-center"
+          className="pointer-events-none absolute bottom-[9%] left-0 right-0 z-20 text-center"
         >
-          <span className="block font-serif text-[clamp(5rem,11vw,11rem)] leading-[0.9] tracking-tight text-caramel mix-blend-multiply">
+          <span className="block font-serif text-[clamp(5rem,11vw,11rem)] leading-[0.9] tracking-tight text-caramel [text-shadow:0_2px_34px_rgba(244,238,230,0.9)]">
             {profile.name}
           </span>
-          <span className="mt-2 block text-[13px] uppercase tracking-[0.45em] text-coffee">
+          <span className="mt-3 block text-[13px] uppercase tracking-[0.45em] text-coffee">
             {profile.nameEn}
           </span>
         </motion.div>
@@ -171,13 +171,13 @@ function StackedStage() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.3, ease: EASE, delay: 0.3 }}
-          className="relative z-10 h-[64vh] w-auto object-contain drop-shadow-[0_30px_60px_rgba(74,58,44,0.25)]"
+          className="relative z-10 h-[62vh] w-auto object-contain drop-shadow-[0_30px_60px_rgba(74,58,44,0.22)] [mask-image:linear-gradient(to_bottom,#000_64%,transparent_96%)] [-webkit-mask-image:linear-gradient(to_bottom,#000_64%,transparent_96%)]"
         />
-        <div className="pointer-events-none absolute bottom-[10%] left-0 right-0 z-20 text-center">
-          <span className="block font-serif text-[19vw] leading-[0.9] tracking-tight text-caramel mix-blend-multiply">
+        <div className="pointer-events-none absolute bottom-[7%] left-0 right-0 z-20 text-center">
+          <span className="block font-serif text-[19vw] leading-[0.9] tracking-tight text-caramel [text-shadow:0_2px_24px_rgba(244,238,230,0.9)]">
             {profile.name}
           </span>
-          <span className="mt-1 block text-[11px] uppercase tracking-[0.4em] text-coffee">
+          <span className="mt-2 block text-[11px] uppercase tracking-[0.4em] text-coffee">
             {profile.nameEn}
           </span>
         </div>
