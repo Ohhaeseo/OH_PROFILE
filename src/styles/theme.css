@@ -1,0 +1,114 @@
+@import "tailwindcss";
+
+/* ============================================================
+   브라운 톤온톤 디자인 토큰 (감성)
+   ============================================================ */
+@theme {
+  --color-cream: #f4eee6;
+  --color-sand: #e7dbc9;
+  --color-linen: #ede4d6;
+  --color-mocha: #b59b7e;
+  --color-caramel: #a6724b;
+  --color-coffee: #6b5440;
+  --color-bark: #4a3a2c;
+  --color-espresso: #2b211a;
+  --color-ink: #1c150f;
+
+  /* 패션(다크 에디토리얼) 전용 */
+  --color-bone: #ece7de;
+  --color-ash: #8a857c;
+
+  --font-sans: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui,
+    sans-serif;
+  --font-serif: "Cormorant Garamond", "Noto Serif KR", Georgia, serif;
+  --font-serif-ko: "Noto Serif KR", "Cormorant Garamond", serif;
+  --font-display: "Anton", "Archivo", "Pretendard", sans-serif;
+  --font-grotesk: "Archivo", "Pretendard", sans-serif;
+
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ============================================================
+   Base
+   ============================================================ */
+:root {
+  color-scheme: light;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+html {
+  scroll-behavior: auto; /* Lenis가 스크롤을 제어 */
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-cream);
+  color: var(--color-espresso);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  letter-spacing: -0.01em;
+}
+
+::selection {
+  background: var(--color-caramel);
+  color: var(--color-cream);
+}
+
+/* 얇은 캐러멜 스크롤 느낌의 링크 밑줄 */
+.link-underline {
+  background-image: linear-gradient(var(--color-caramel), var(--color-caramel));
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.5s var(--ease-out-soft);
+}
+.link-underline:hover {
+  background-size: 100% 1px;
+}
+
+/* ============================================================
+   감성 질감: 전역 film grain 오버레이
+   ============================================================ */
+.grain-overlay {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  opacity: 0.05;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* 증명사진 등 이미지의 브라운 듀오톤 톤맞춤 */
+.duotone {
+  filter: sepia(0.5) saturate(0.85) brightness(1.02) contrast(1.02)
+    hue-rotate(-12deg);
+}
+
+/* 프로젝트 스크린샷을 따뜻한 세계로 안착시키는 부드러운 보정 */
+.warm-screenshot {
+  filter: saturate(0.92) contrast(0.98) brightness(1.01);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain-overlay {
+    display: none;
+  }
+}
