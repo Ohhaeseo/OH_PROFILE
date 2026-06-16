@@ -49,7 +49,7 @@ function MainProject({ p }: { p: Project }) {
               className={imageClassName(p.num)}
             />
           </div>
-          {p.gallery && (
+          {p.gallery && p.id !== "nullnull" && (
             <div className="mt-3 grid grid-cols-3 gap-3">
               {p.gallery.map((g) => (
                 <div

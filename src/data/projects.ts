@@ -82,6 +82,11 @@ export const projects: Project[] = [
       "실제 서비스 구현 전 단계로 PRD, 화면 구조, 프로토타입, 발표자료까지 정리했습니다.",
     ],
     cover: `${A}/nullnull-home.png`,
+    gallery: [
+      `${A}/nullnull-onboarding.png`,
+      `${A}/nullnull-ai.png`,
+      `${A}/nullnull-detail.png`,
+    ],
     featured: true,
   },
   {
