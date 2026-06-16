@@ -133,6 +133,8 @@ export function mountFashion(container: HTMLElement): {
   });
 
   const mesh = new THREE.Mesh(geometry, material);
+  mesh.scale.setScalar(0.78);
+  mesh.position.set(1.05, -0.05, 0);
   scene.add(mesh);
 
   const resize = () => {
@@ -180,7 +182,7 @@ export function mountFashion(container: HTMLElement): {
     const z = 4 - scrollP * 1.1;
     camera.position.x += (uniforms.uMouse.value.x * 0.5 - camera.position.x) * 0.04;
     camera.position.z += (z - camera.position.z) * 0.05;
-    camera.lookAt(0, 0, 0);
+    camera.lookAt(0.65, -0.05, 0);
     renderer.render(scene, camera);
     raf = requestAnimationFrame(render);
   }

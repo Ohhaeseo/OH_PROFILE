@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
+import { BrandMark } from "./BrandMark";
 
 const sectionLinks = [
-  { label: "About", href: "#about" },
-  { label: "Work", href: "#work" },
-  { label: "Craft", href: "#craft" },
+  { label: "Roadmap", href: "#roadmap" },
+  { label: "Stack", href: "#stack" },
+  { label: "Projects", href: "#projects" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -33,28 +34,14 @@ export function Nav() {
           scrolled ? "py-3" : "py-5 sm:py-7"
         }`}
       >
-        {/* 좌측: 로고 + 현재 위치 */}
-        <div className="flex items-baseline gap-3">
-          <Link
-            to="/"
-            className={`tracking-tight ${
-              onFashion
-                ? "font-display text-lg uppercase text-bone sm:text-xl"
-                : "font-serif text-xl text-espresso sm:text-2xl"
-            }`}
-          >
-            오해서
-          </Link>
-          <span
-            className={`hidden text-[11px] uppercase tracking-[0.25em] sm:inline ${
-              onFashion ? "text-bone/55" : "text-mocha"
-            }`}
-          >
-            {onFashion ? "→ Wardrobe" : "→ Developer"}
-          </span>
-        </div>
+        <Link
+          to="/"
+          aria-label="Portfolio home"
+          className="group grid h-11 w-11 place-items-center rounded-2xl transition-transform duration-500 hover:-translate-y-0.5"
+        >
+          <BrandMark className="h-9 w-9" dark={onFashion} />
+        </Link>
 
-        {/* 우측: 메뉴 */}
         <nav
           className={`flex items-center gap-5 text-[12.5px] tracking-wide sm:gap-7 ${
             onFashion ? "text-bone" : "text-coffee"
@@ -75,15 +62,18 @@ export function Nav() {
               to="/"
               className="rounded-full border border-bone/40 px-4 py-1.5 text-[12px] uppercase tracking-wide text-bone transition-colors duration-300 hover:bg-bone hover:text-[#100f0e]"
             >
-              ← Portfolio
+              Portfolio
             </Link>
           ) : (
-            <Link
-              to="/fashion"
-              className="rounded-full border border-mocha/50 px-4 py-1.5 text-[12px] tracking-wide text-coffee transition-colors duration-300 hover:border-caramel hover:text-caramel"
-            >
-              Wardrobe ↗
-            </Link>
+            <motion.div whileTap={{ scale: 0.9 }} className="relative">
+              <Link
+                to="/fashion"
+                className="group relative isolate inline-flex overflow-hidden rounded-full border border-mocha/50 px-4 py-1.5 text-[12px] tracking-wide text-coffee transition-colors duration-300 hover:border-caramel hover:text-cream"
+              >
+                <span className="absolute inset-0 -z-10 scale-x-0 rounded-full bg-espresso transition-transform duration-500 ease-out group-hover:scale-x-100" />
+                Wardrobe ↗
+              </Link>
+            </motion.div>
           )}
         </nav>
       </div>

@@ -85,11 +85,11 @@ function YearRow({ year }: { year: string }) {
 
 export function Timeline() {
   return (
-    <section className="relative bg-cream py-28 sm:py-36">
+    <section id="roadmap" className="relative bg-cream py-28 sm:py-36">
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
         <Reveal className="mb-4 flex items-center gap-4 text-[12px] uppercase tracking-[0.3em] text-caramel">
           <span className="h-px w-10 bg-caramel/60" />
-          Roadmap — 성장의 기록
+          Roadmap · 성장의 기록
         </Reveal>
         <div className="flex flex-wrap items-end justify-between gap-4">
           <Reveal>

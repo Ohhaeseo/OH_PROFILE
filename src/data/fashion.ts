@@ -8,10 +8,10 @@ const A = `${import.meta.env.BASE_URL}assets/fashion`;
 export const fashionIntro = {
   kicker: "OFF THE CLOCK",
   title: "WARDROBE",
-  lead: "화면을 설계하지 않는 시간엔, 나를 설계한다.",
-  manifesto: "디테일은 거짓말을 하지 않는다.",
+  lead: "평소 즐겨 입는 옷과 분위기를 정리한 개인 스타일 아카이브입니다.",
+  manifesto: "크게 꾸미기보다, 자주 손이 가는 옷을 담백하게 남깁니다.",
   manifestoSub:
-    "톤, 실루엣, 질감. 코드처럼 옷도 결국 디테일의 합으로 완성된다고 믿는다. 브라운으로 정돈된 개발자의 시간 너머, 이곳은 조금 더 어둡고 솔직한 취향의 공간이다.",
+    "검정, 카키, 버건디, 넓은 실루엣처럼 자주 입는 톤과 형태를 중심으로 기록했습니다. 개발 포트폴리오와는 다른, 조금 더 개인적인 페이지입니다.",
   hero: `${A}/fashion-1.jpg`,
 };
 

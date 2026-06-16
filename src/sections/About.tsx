@@ -8,7 +8,7 @@ export function About() {
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
         <Reveal className="mb-14 flex items-center gap-4 text-[12px] uppercase tracking-[0.3em] text-caramel">
           <span className="h-px w-10 bg-caramel/60" />
-          Introduction — 소개
+          Introduction · 소개
         </Reveal>
 
         <div className="grid gap-12 border-t border-sand pt-14 lg:grid-cols-12 lg:items-start lg:gap-16">

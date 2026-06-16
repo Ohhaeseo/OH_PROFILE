@@ -20,22 +20,22 @@ export function Contact() {
 
       <div className="relative mx-auto max-w-[1400px] px-5 text-center sm:px-8">
         <Reveal className="mb-7 flex items-center justify-center gap-3 text-[12px] uppercase tracking-[0.32em] text-caramel">
-          Vision 2026
+          Next Step
         </Reveal>
 
         <Reveal>
           <h2 className="mx-auto max-w-4xl font-serif text-[10vw] leading-[1.05] tracking-tight sm:text-[clamp(2.5rem,6vw,5.5rem)]">
-            즐거움을 주는 경험,
+            사용자의 흐름을 읽고,
             <br />
-            <span className="text-mocha">견고한 소프트웨어.</span>
+            <span className="text-mocha">끝까지 연결하는 개발자.</span>
           </h2>
         </Reveal>
 
         <Reveal delay={0.1}>
           <p className="mx-auto mt-9 max-w-md text-[15px] leading-loose text-cream/70 sm:text-base">
-            함께 만들고 싶은 이야기가 있다면,
+            함께 이야기해 보고 싶은 프로젝트가 있다면
             <br className="hidden sm:block" />
-            언제든 편하게 연락 주세요.
+            편하게 연락 주세요.
           </p>
         </Reveal>
 

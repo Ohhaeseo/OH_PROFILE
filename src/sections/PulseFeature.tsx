@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { pulse, contributions, type Contribution } from "../data/pulse";
 import { Reveal } from "../components/Reveal";
 
@@ -80,12 +81,12 @@ function ContributionBlock({ c, flip }: { c: Contribution; flip: boolean }) {
 
 export function PulseFeature() {
   return (
-    <section id="pulse" className="relative bg-cream pt-28 pb-8 sm:pt-36">
+    <section id="projects" className="relative bg-cream pt-28 pb-8 sm:pt-36">
       <div className="mx-auto max-w-[1500px] px-5 sm:px-9">
         {/* 헤더 */}
         <Reveal className="flex items-center gap-4 text-[12px] uppercase tracking-[0.3em] text-caramel">
           <span className="h-px w-10 bg-caramel/60" />
-          {pulse.eyebrow}
+          Main Project 01
         </Reveal>
 
         <div className="mt-8 grid items-end gap-6 lg:grid-cols-12">
@@ -94,7 +95,7 @@ export function PulseFeature() {
               {pulse.title}
             </h2>
           </Reveal>
-          <Reveal delay={0.1} className="lg:col-span-5 lg:pb-3">
+          <div className="lg:col-span-5 lg:pb-3">
             <p className="text-[15px] text-coffee sm:text-base">
               {pulse.subtitle}
             </p>
@@ -108,7 +109,15 @@ export function PulseFeature() {
                 </span>
               ))}
             </div>
-          </Reveal>
+            <Link
+              to="/projects/pulse"
+              state={{ returnTo: "#projects" }}
+              onClick={() => window.scrollTo({ top: 0, left: 0, behavior: "auto" })}
+              className="mt-6 inline-flex rounded-full bg-espresso px-5 py-2.5 text-[12px] font-semibold tracking-wide text-cream shadow-[0_18px_40px_-24px_rgba(39,31,25,0.8)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-caramel"
+            >
+              프로젝트 상세보기
+            </Link>
+          </div>
         </div>
 
         {/* 대형 커버 */}
@@ -128,9 +137,17 @@ export function PulseFeature() {
             <p className="font-serif-ko text-2xl leading-snug text-espresso sm:text-[1.7rem]">
               {pulse.tagline}
             </p>
+            <Link
+              to="/projects/pulse"
+              state={{ returnTo: "#projects" }}
+              onClick={() => window.scrollTo({ top: 0, left: 0, behavior: "auto" })}
+              className="mt-7 inline-flex rounded-full bg-espresso px-5 py-2.5 text-[12px] font-semibold tracking-wide text-cream shadow-[0_18px_40px_-24px_rgba(39,31,25,0.8)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-caramel lg:hidden"
+            >
+              프로젝트 상세보기
+            </Link>
           </Reveal>
           <div className="space-y-5 text-[15px] leading-relaxed text-coffee lg:col-span-6 lg:col-start-7">
-            {pulse.overview.map((p, i) => (
+            {pulse.overview.slice(0, 2).map((p, i) => (
               <Reveal key={i} delay={i * 0.05}>
                 <p>{p}</p>
               </Reveal>
@@ -152,25 +169,10 @@ export function PulseFeature() {
           </div>
         </div>
 
-        {/* 기술 파이프라인 */}
-        <Reveal className="mt-16">
-          <div className="mx-auto max-w-[760px] overflow-hidden rounded-[1.5rem] border border-sand bg-white/60 p-5 shadow-[0_40px_90px_-50px_rgba(74,58,44,0.45)] sm:p-7">
-            <img
-              src={pulse.pipeline}
-              alt="PULSE 기술 아키텍처 파이프라인"
-              loading="lazy"
-              className="mx-auto w-full max-w-[600px]"
-            />
-            <p className="mt-4 text-center text-[12px] text-mocha">
-              React · Spring Boot · FastAPI로 이어지는 분석–생성–렌더링 파이프라인
-            </p>
-          </div>
-        </Reveal>
-
         {/* My Part */}
         <Reveal className="mt-24 flex items-center gap-4 text-[12px] uppercase tracking-[0.3em] text-caramel">
           <span className="h-px w-10 bg-caramel/60" />
-          My Part — 내가 맡은 핵심 파트
+          My Part · 맡은 역할과 구현 흐름
         </Reveal>
         <Reveal delay={0.05}>
           <p className="mt-4 max-w-2xl font-serif text-2xl text-espresso sm:text-3xl">
@@ -179,7 +181,7 @@ export function PulseFeature() {
         </Reveal>
 
         <div className="mt-16 space-y-24 sm:space-y-32">
-          {contributions.map((c, i) => (
+          {contributions.slice(0, 2).map((c, i) => (
             <ContributionBlock key={c.no} c={c} flip={i % 2 === 1} />
           ))}
         </div>

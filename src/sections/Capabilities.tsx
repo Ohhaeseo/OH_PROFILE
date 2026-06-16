@@ -3,24 +3,25 @@ import { Reveal } from "../components/Reveal";
 
 export function Capabilities() {
   return (
-    <section className="relative bg-linen py-28 sm:py-36">
+    <section id="stack" className="relative bg-linen py-28 sm:py-36">
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
         <div className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-4">
             <Reveal className="mb-4 flex items-center gap-4 text-[12px] uppercase tracking-[0.3em] text-caramel">
               <span className="h-px w-10 bg-caramel/60" />
-              Capabilities
+              Tech Stack
             </Reveal>
             <Reveal>
               <h2 className="font-serif text-4xl leading-tight tracking-tight text-espresso sm:text-5xl">
                 Full-Stack
-                <br />& AI Toolkit
+                <br />
+                &amp; AI Toolkit
               </h2>
             </Reveal>
             <Reveal delay={0.1}>
               <p className="mt-6 max-w-sm text-[14px] leading-relaxed text-coffee">
-                백엔드를 중심에 두고, 데이터·AI·실감형 콘텐츠까지 하나의 흐름으로
-                연결합니다.
+                백엔드를 중심으로 화면, 데이터 분석, 생성형 AI, 콘텐츠 제작까지
+                필요한 도구를 프로젝트 흐름에 맞게 사용합니다.
               </p>
             </Reveal>
           </div>
@@ -49,7 +50,7 @@ export function Capabilities() {
                   {s.items.map((it) => (
                     <li
                       key={it}
-                      className="text-[13.5px] text-coffee before:mr-2 before:text-caramel before:content-['—']"
+                      className="text-[13.5px] text-coffee before:mr-2 before:text-caramel before:content-['·']"
                     >
                       {it}
                     </li>

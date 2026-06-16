@@ -9,10 +9,10 @@ export function Portfolio() {
   return (
     <main>
       <HeroIntro />
+      <Timeline />
+      <Capabilities />
       <PulseFeature />
       <Work />
-      <Capabilities />
-      <Timeline />
       <Contact />
     </main>
   );

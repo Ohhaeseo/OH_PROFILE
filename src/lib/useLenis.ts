@@ -16,6 +16,8 @@ export function useLenis() {
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
     });
+    (window as unknown as { __portfolioLenis?: Lenis }).__portfolioLenis =
+      lenis;
 
     let raf = 0;
     const loop = (time: number) => {
@@ -41,6 +43,8 @@ export function useLenis() {
     return () => {
       cancelAnimationFrame(raf);
       document.removeEventListener("click", onClick);
+      delete (window as unknown as { __portfolioLenis?: Lenis })
+        .__portfolioLenis;
       lenis.destroy();
     };
   }, []);

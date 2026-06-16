@@ -1,200 +1,189 @@
-import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { fashionIntro, looks, type Look } from "../data/fashion";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
-/** 다크 3D 오브제 배경 (three는 패션 페이지에서만 lazy-load) */
-function Hero3D() {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    let dispose = () => {};
-    let onScroll: (() => void) | null = null;
-    let alive = true;
-    import("../lib/fashionThree")
-      .then(({ mountFashion }) => {
-        if (!alive || !el) return;
-        const api = mountFashion(el);
-        dispose = api.dispose;
-        onScroll = () =>
-          api.setScroll(window.scrollY / Math.max(1, window.innerHeight));
-        window.addEventListener("scroll", onScroll, { passive: true });
-        onScroll();
-      })
-      .catch(() => {});
-    return () => {
-      alive = false;
-      if (onScroll) window.removeEventListener("scroll", onScroll);
-      dispose();
-    };
-  }, []);
+function EntryPull() {
   return (
-    <div
-      ref={ref}
-      className="absolute inset-0 [mask-image:radial-gradient(circle_at_57%_40%,black_60%,transparent_94%)]"
+    <motion.div
+      aria-hidden
+      initial={{ clipPath: "circle(0% at 86% 8%)", opacity: 1 }}
+      animate={{ clipPath: "circle(150% at 50% 50%)", opacity: 0 }}
+      transition={{ duration: 1.15, ease: EASE }}
+      className="pointer-events-none fixed inset-0 z-[80] bg-[#080706]"
     />
   );
 }
 
-function LookCard({ look }: { look: Look }) {
+function LookCard({ look, index }: { look: Look; index: number }) {
   const wide = look.span === "wide";
   return (
     <motion.figure
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 54, scale: 0.98 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, margin: "0px 0px -12% 0px" }}
-      transition={{ duration: 0.9, ease: EASE }}
-      className={`group relative ${wide ? "sm:col-span-2" : ""}`}
+      transition={{ duration: 0.95, ease: EASE, delay: (index % 3) * 0.05 }}
+      className={`group relative ${wide ? "lg:col-span-12" : "lg:col-span-4"}`}
     >
       <div className="relative overflow-hidden bg-[#1b1a18]">
         <img
           src={look.image}
           alt={look.title}
           loading="lazy"
-          className={`w-full object-cover grayscale-[0.15] transition-all duration-[1.3s] ease-out group-hover:scale-[1.05] group-hover:grayscale-0 ${
-            wide ? "aspect-[16/10]" : "aspect-[4/5]"
+          className={`w-full object-cover grayscale-[0.08] transition-all duration-[1.4s] ease-out group-hover:scale-[1.045] group-hover:grayscale-0 ${
+            wide ? "aspect-[16/8]" : "aspect-[4/5]"
           }`}
         />
-        {/* 인덱스 */}
-        <span className="absolute left-4 top-3 font-display text-2xl text-bone/85 mix-blend-difference">
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/52 via-black/5 to-transparent" />
+        <span className="absolute left-5 top-4 font-display text-5xl text-bone/90 mix-blend-difference">
           {look.id}
         </span>
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
+        <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-5 p-5">
+          <span className="font-display text-[clamp(1.8rem,4vw,4rem)] uppercase leading-none text-bone">
+            {look.title}
+          </span>
+          <span className="hidden max-w-[180px] text-right text-[11px] uppercase tracking-[0.22em] text-bone/70 sm:block">
+            {look.meta}
+          </span>
+        </figcaption>
       </div>
-      <figcaption className="mt-3 flex items-baseline justify-between">
-        <span className="font-grotesk text-sm font-semibold uppercase tracking-wide text-bone">
-          {look.title}
-        </span>
-        <span className="text-[11px] uppercase tracking-[0.2em] text-ash">
-          {look.meta}
-        </span>
-      </figcaption>
     </motion.figure>
   );
 }
 
 export function Fashion() {
   return (
-    <main className="min-h-screen bg-[#100f0e] text-bone">
-      {/* ───────── HERO (3D, full-bleed dark) ───────── */}
-      <section className="relative flex min-h-[100svh] items-end overflow-hidden">
-        {/* 미세 노이즈 그레인 + 비네팅 */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(120% 90% at 60% 35%, #1a1816 0%, #100f0e 55%, #0a0908 100%)",
-          }}
-        />
-        <Hero3D />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#0a0908] via-transparent to-transparent" />
+    <main className="min-h-screen bg-[#080706] text-bone">
+      <EntryPull />
 
-        <div className="relative z-10 w-full px-5 pb-14 sm:px-9 sm:pb-20">
+      <section className="relative flex min-h-[112svh] items-end overflow-hidden">
+        <motion.img
+          src={fashionIntro.hero}
+          alt=""
+          aria-hidden
+          initial={{ scale: 1.08, opacity: 0.35 }}
+          animate={{ scale: 1, opacity: 0.82 }}
+          transition={{ duration: 1.4, ease: EASE, delay: 0.1 }}
+          className="absolute inset-0 h-full w-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(8,7,6,0.92)_0%,rgba(8,7,6,0.58)_42%,rgba(8,7,6,0.18)_100%)]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#080706] via-transparent to-black/20" />
+
+        <span
+          aria-hidden
+          className="pointer-events-none absolute -left-[3vw] top-[13%] font-display text-[22vw] uppercase leading-none text-bone/[0.08]"
+        >
+          HAESEO
+        </span>
+
+        <div className="relative z-10 w-full px-5 pb-20 sm:px-9 sm:pb-28">
           <div className="mx-auto max-w-[1500px]">
             <motion.p
-              initial={{ opacity: 0, y: 14 }}
+              initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.6 }}
-              className="mb-4 flex items-center gap-3 text-[11px] uppercase tracking-[0.4em] text-bone/70"
+              transition={{ duration: 1, delay: 0.5 }}
+              className="mb-5 flex items-center gap-3 text-[11px] uppercase tracking-[0.4em] text-bone/75"
             >
               <span className="h-px w-10 bg-bone/50" />
               {fashionIntro.kicker} · OH HAESEO
             </motion.p>
-
             <h1 className="overflow-hidden">
               <motion.span
-                initial={{ y: "110%" }}
+                initial={{ y: "112%" }}
                 animate={{ y: "0%" }}
-                transition={{ duration: 1.2, ease: EASE, delay: 0.7 }}
-                className="block font-display text-[24vw] leading-[0.82] tracking-tight text-bone sm:text-[clamp(7rem,17vw,17rem)]"
+                transition={{ duration: 1.15, ease: EASE, delay: 0.58 }}
+                className="block font-display text-[18vw] uppercase leading-[0.78] text-bone sm:text-[clamp(8rem,17vw,18rem)]"
               >
-                WARDROBE
+                {fashionIntro.title}
               </motion.span>
             </h1>
-
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1.2, delay: 1.2 }}
-              className="mt-6 max-w-md text-[15px] leading-relaxed text-bone/75 sm:text-base"
+            <motion.div
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, ease: EASE, delay: 0.95 }}
+              className="mt-8 grid gap-5 sm:grid-cols-[minmax(0,520px)_auto]"
             >
-              {fashionIntro.lead}
-            </motion.p>
+              <p className="border-l border-bone/25 pl-5 text-[15px] leading-relaxed text-bone/82 sm:text-base">
+                {fashionIntro.lead}
+              </p>
+              <p className="max-w-sm text-[12px] uppercase tracking-[0.24em] text-bone/55 sm:self-end">
+                Daily fit archive / calm tones / oversized shape
+              </p>
+            </motion.div>
           </div>
         </div>
 
         <motion.span
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1.6 }}
-          className="absolute bottom-6 right-6 hidden text-[10px] uppercase tracking-[0.3em] text-bone/50 sm:block"
+          transition={{ duration: 1, delay: 1.35 }}
+          className="absolute bottom-6 right-6 hidden text-[10px] uppercase tracking-[0.3em] text-bone/55 sm:block"
         >
           Scroll ↓
         </motion.span>
       </section>
 
-      {/* ───────── MANIFESTO ───────── */}
-      <section className="px-5 py-28 sm:px-9 sm:py-40">
-        <div className="mx-auto max-w-[1500px]">
+      <section className="px-5 py-24 sm:px-9 sm:py-36">
+        <div className="mx-auto grid max-w-[1500px] gap-12 lg:grid-cols-[0.85fr_1fr] lg:items-end">
           <motion.h2
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 34 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1, ease: EASE }}
-            className="max-w-4xl font-display text-[12vw] leading-[0.95] text-bone sm:text-[clamp(3rem,7vw,7rem)]"
+            className="font-display text-[14vw] uppercase leading-[0.86] text-bone sm:text-[clamp(4.5rem,9vw,9rem)]"
           >
-            {fashionIntro.manifesto}
+            Looks
+            <br />
+            I Wear.
           </motion.h2>
           <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 1, delay: 0.15 }}
-            className="mt-8 max-w-xl text-[15px] leading-relaxed text-ash"
+            transition={{ duration: 0.9, delay: 0.1, ease: EASE }}
+            className="max-w-2xl text-[16px] leading-[1.9] text-ash sm:text-[18px]"
           >
+            {fashionIntro.manifesto}
+            <br />
             {fashionIntro.manifestoSub}
           </motion.p>
         </div>
       </section>
 
-      {/* ───────── LOOKBOOK ───────── */}
       <section className="px-5 pb-28 sm:px-9 sm:pb-40">
         <div className="mx-auto max-w-[1500px]">
-          <div className="mb-10 flex items-end justify-between border-b border-white/10 pb-5">
+          <div className="mb-8 flex items-end justify-between border-b border-white/10 pb-5">
             <span className="font-grotesk text-sm font-bold uppercase tracking-[0.25em] text-bone">
               Lookbook
             </span>
             <span className="text-[11px] uppercase tracking-[0.2em] text-ash">
-              2025 — 2026 · {looks.length} Looks
+              2025 · 2026 · {looks.length} Looks
             </span>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3">
-            {looks.map((l) => (
-              <LookCard key={l.id} look={l} />
+          <div className="grid gap-5 sm:gap-6 lg:grid-cols-12">
+            {looks.map((look, index) => (
+              <LookCard key={look.id} look={look} index={index} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* ───────── OUTRO ───────── */}
       <section className="border-t border-white/10 px-5 py-20 sm:px-9">
         <div className="mx-auto flex max-w-[1500px] flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
-          <p className="font-display text-3xl uppercase text-bone sm:text-4xl">
-            Back to building.
+          <p className="font-display text-4xl uppercase leading-none text-bone sm:text-6xl">
+            Back to portfolio.
           </p>
           <Link
             to="/"
             className="group inline-flex items-center gap-2 rounded-full border border-bone/30 px-6 py-3 text-[13px] uppercase tracking-[0.2em] text-bone transition-colors duration-300 hover:border-bone hover:bg-bone hover:text-[#100f0e]"
           >
-            ← Developer Portfolio
+            Developer Portfolio
           </Link>
         </div>
         <p className="mx-auto mt-12 max-w-[1500px] text-[11px] uppercase tracking-[0.25em] text-ash">
-          오해서 · OH HAESEO — Off Duty
+          오해서 · OH HAESEO · Off Duty
         </p>
       </section>
     </main>
