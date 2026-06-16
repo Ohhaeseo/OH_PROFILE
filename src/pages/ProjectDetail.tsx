@@ -649,7 +649,7 @@ export function ProjectDetail() {
         </div>
       </section>
 
-      {project.id !== "dspy-ad" && (
+      {project.id !== "dspy-ad" && project.gallery && project.gallery.length > 0 && (
         <section className="px-5 py-20 sm:px-9 sm:py-28">
           <div className="mx-auto max-w-[1320px]">
             <Reveal>
