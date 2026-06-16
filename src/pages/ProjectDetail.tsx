@@ -410,8 +410,11 @@ export function ProjectDetail() {
           <Link
             to={`/${returnTo}`}
             replace
-            className="link-underline text-[12px] uppercase tracking-[0.26em] text-cream/60"
+            className="group inline-flex items-center gap-3 rounded-full border border-cream/20 bg-cream/[0.08] px-5 py-2.5 text-[12px] font-semibold uppercase tracking-[0.22em] text-cream/82 shadow-[0_18px_50px_-34px_rgba(0,0,0,0.9)] backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-caramel/70 hover:bg-caramel hover:text-espresso"
           >
+            <span className="text-base leading-none transition-transform duration-300 group-hover:-translate-x-1">
+              ←
+            </span>
             Back to Projects
           </Link>
 
@@ -646,33 +649,40 @@ export function ProjectDetail() {
         </div>
       </section>
 
-      <section className="px-5 py-20 sm:px-9 sm:py-28">
-        <div className="mx-auto max-w-[1320px]">
-          <Reveal>
-            <p className="text-[12px] font-semibold uppercase tracking-[0.3em] text-caramel">
-              Screens & Materials
-            </p>
-            <h2 className="mt-4 font-serif-ko text-4xl leading-tight text-espresso sm:text-5xl">
-              화면과 자료를 프로젝트별 맥락에 맞게 담았습니다.
-            </h2>
-          </Reveal>
+      {project.id !== "dspy-ad" && (
+        <section className="px-5 py-20 sm:px-9 sm:py-28">
+          <div className="mx-auto max-w-[1320px]">
+            <Reveal>
+              <p className="text-[12px] font-semibold uppercase tracking-[0.3em] text-caramel">
+                Screens & Materials
+              </p>
+              <h2 className="mt-4 font-serif-ko text-4xl leading-tight text-espresso sm:text-5xl">
+                화면과 자료를 프로젝트별 맥락에 맞게 담았습니다.
+              </h2>
+            </Reveal>
 
-          <div className="mt-10 grid gap-5 md:grid-cols-2">
-            {[project.cover, ...(project.gallery ?? [])].map((image, index) => (
-              <Reveal key={image} delay={index * 0.04}>
-                <div className="overflow-hidden rounded-[1.6rem] border border-sand bg-sand/35 p-2">
-                  <img
-                    src={image}
-                    alt=""
-                    loading={index === 0 ? undefined : "lazy"}
-                    className={imageClassName(project, "aspect-[4/3] bg-cream")}
-                  />
-                </div>
-              </Reveal>
-            ))}
+            <div className="mt-10 grid gap-5 md:grid-cols-2">
+              {[project.cover, ...(project.gallery ?? [])].map(
+                (image, index) => (
+                  <Reveal key={image} delay={index * 0.04}>
+                    <div className="overflow-hidden rounded-[1.6rem] border border-sand bg-sand/35 p-2">
+                      <img
+                        src={image}
+                        alt=""
+                        loading={index === 0 ? undefined : "lazy"}
+                        className={imageClassName(
+                          project,
+                          "aspect-[4/3] bg-cream",
+                        )}
+                      />
+                    </div>
+                  </Reveal>
+                ),
+              )}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {isPulse && (
         <section className="bg-espresso px-5 py-24 text-cream sm:px-9 sm:py-32">
