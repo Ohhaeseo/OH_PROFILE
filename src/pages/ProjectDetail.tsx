@@ -13,7 +13,6 @@ type RoomSkin = {
   second: string;
   soft: string;
   onDark: string;
-  objects: string[];
 };
 
 const roomSkins: Record<string, RoomSkin> = {
@@ -23,7 +22,6 @@ const roomSkins: Record<string, RoomSkin> = {
     second: "#002b7a",
     soft: "#fff1ed",
     onDark: "#ffb39e",
-    objects: ["Insight", "Reels", "Dashboard", "Pro Match"],
   },
   "vr-live": {
     room: "Immersive Practice Room",
@@ -31,7 +29,6 @@ const roomSkins: Record<string, RoomSkin> = {
     second: "#00b8d9",
     soft: "#f1efff",
     onDark: "#cabdff",
-    objects: ["PDF", "Voice", "STT", "Feedback"],
   },
   nullnull: {
     room: "Nowcasting Room",
@@ -39,7 +36,6 @@ const roomSkins: Record<string, RoomSkin> = {
     second: "#91ad00",
     soft: "#eef1ff",
     onDark: "#b8c0ff",
-    objects: ["Crowd", "Weather", "Transit", "Alternative"],
   },
   "dspy-ad": {
     room: "Prompt Research Room",
@@ -47,7 +43,6 @@ const roomSkins: Record<string, RoomSkin> = {
     second: "#f0c996",
     soft: "#f5eee5",
     onDark: "#f0c996",
-    objects: ["Hook", "Showcase", "VQA", "CTA"],
   },
 };
 
@@ -467,7 +462,7 @@ export function ProjectDetail() {
             <span className="text-base leading-none transition-transform duration-300 group-hover:-translate-x-1">
               ←
             </span>
-            Back to Projects
+            프로젝트 목록으로
           </Link>
 
           <div className="mt-14 grid gap-12 lg:grid-cols-[1fr_430px] lg:items-end">
@@ -482,8 +477,6 @@ export function ProjectDetail() {
                   style={{ backgroundColor: skin.onDark }}
                 />
                 <span>{detail.category}</span>
-                <span className="hidden sm:inline">/</span>
-                <span>{skin.room}</span>
               </div>
               <h1 className="mt-7 font-serif text-[clamp(4.8rem,13vw,14rem)] leading-[0.82] tracking-tight text-cream">
                 {project.title}
@@ -498,7 +491,7 @@ export function ProjectDetail() {
                 className="text-[12px] font-semibold uppercase tracking-[0.26em]"
                 style={{ color: skin.onDark }}
               >
-                Info Dock
+                프로젝트 정보
               </p>
               <div className="mt-6 space-y-5 text-[14px] leading-relaxed text-cream/75">
                 <p>{project.year}</p>
@@ -518,28 +511,6 @@ export function ProjectDetail() {
           </div>
 
           <div className="relative mt-14 overflow-hidden rounded-[2rem] border border-cream/15 bg-cream/10 p-3 shadow-[0_70px_160px_-70px_rgba(0,0,0,0.9)]">
-            <div className="absolute left-6 top-6 z-10 rounded-full bg-espresso/80 px-4 py-2 text-[11px] uppercase tracking-[0.24em] text-cream/70 backdrop-blur">
-              Room Entrance
-            </div>
-            <div className="pointer-events-none absolute inset-0 z-10 hidden lg:block">
-              {skin.objects.map((object, index) => (
-                <motion.span
-                  key={object}
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.25 + index * 0.08, duration: 0.7 }}
-                  className="absolute rounded-full border bg-espresso/55 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] backdrop-blur"
-                  style={{
-                    color: skin.onDark,
-                    borderColor: `${skin.accent}80`,
-                    left: `${12 + index * 18}%`,
-                    top: index % 2 === 0 ? "78%" : "15%",
-                  }}
-                >
-                  {object}
-                </motion.span>
-              ))}
-            </div>
             <motion.img
               src={project.cover}
               alt={project.title}
@@ -574,7 +545,7 @@ export function ProjectDetail() {
         <div className="mx-auto max-w-[1320px]">
           <Reveal>
             <p className="text-[12px] font-semibold uppercase tracking-[0.3em] text-caramel">
-              Room Entrance
+              프로젝트 개요
             </p>
             <p className="mt-5 max-w-5xl text-[22px] leading-[1.9] text-coffee">
               {detail.lead}
@@ -607,7 +578,7 @@ export function ProjectDetail() {
         <div className="mx-auto max-w-[1320px]">
           <Reveal>
             <p className="text-[12px] font-semibold uppercase tracking-[0.3em] text-caramel">
-              Room Logic
+              프로젝트 구조
             </p>
             <h2 className="mt-5 max-w-4xl font-serif-ko text-4xl leading-tight text-cream sm:text-6xl">
               {detail.deepTitle}
@@ -706,7 +677,7 @@ export function ProjectDetail() {
             <div className="grid gap-8 lg:grid-cols-[320px_1fr]">
               <div>
                 <p className="text-[12px] font-semibold uppercase tracking-[0.28em] text-caramel">
-                  Evidence Dock
+                  근거 자료
                 </p>
                 <h3 className="mt-4 text-2xl font-semibold text-espresso">
                   {detail.evidenceTitle}
@@ -739,7 +710,7 @@ export function ProjectDetail() {
           <div className="mx-auto max-w-[1320px]">
             <Reveal>
               <p className="text-[12px] font-semibold uppercase tracking-[0.3em] text-caramel">
-                Evidence Frames
+                화면 자료
               </p>
               <h2 className="mt-4 font-serif-ko text-4xl leading-tight text-espresso sm:text-5xl">
                 화면과 자료를 프로젝트별 맥락에 맞게 담았습니다.
@@ -772,8 +743,8 @@ export function ProjectDetail() {
                       <figcaption className="flex items-center justify-between px-3 pb-2 pt-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-caramel">
                         <span>
                           {index === 0
-                            ? "Main Wall"
-                            : `Evidence ${String(index).padStart(2, "0")}`}
+                            ? "대표 화면"
+                            : `자료 ${String(index).padStart(2, "0")}`}
                         </span>
                         <span
                           className="h-2 w-2 rounded-full"

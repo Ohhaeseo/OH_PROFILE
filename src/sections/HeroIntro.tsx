@@ -123,6 +123,25 @@ function HeroStage() {
           OH HAESEO
         </motion.span>
 
+        <div className="pointer-events-none absolute inset-0 hidden lg:block">
+          {[
+            ["✦", "left-[18%] top-[28%]"],
+            ["⌁", "right-[20%] top-[35%]"],
+            ["◐", "left-[24%] bottom-[22%]"],
+            ["↗", "right-[28%] bottom-[18%]"],
+          ].map(([symbol, position], index) => (
+            <motion.span
+              key={symbol}
+              initial={{ opacity: 0, y: 18, scale: 0.9 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.9, ease: EASE, delay: 0.75 + index * 0.1 }}
+              className={`symbol-drift warm-pill absolute grid h-12 w-12 place-items-center rounded-full text-lg text-caramel ${position}`}
+            >
+              {symbol}
+            </motion.span>
+          ))}
+        </div>
+
         <motion.img
           src={PORTRAIT}
           alt="오해서"
@@ -165,7 +184,7 @@ function ProfileStrengths() {
       id="about"
       className="relative z-20 bg-cream px-5 pt-8 pb-6 sm:px-9 lg:-mt-[120vh] lg:min-h-screen lg:pt-[7vh]"
     >
-      <div className="mx-auto max-w-[1120px] rounded-[1.75rem] border border-sand p-5 shadow-[0_35px_100px_-80px_rgba(74,58,44,0.7)]">
+        <div className="interactive-card mx-auto max-w-[1120px] rounded-[1.75rem] border border-sand p-5 shadow-[0_35px_100px_-80px_rgba(74,58,44,0.7)]">
         <div className="grid gap-6 lg:grid-cols-[280px_1fr] lg:items-start">
           <motion.div
             initial={{ opacity: 0, x: -44 }}
@@ -216,9 +235,9 @@ function ProfileStrengths() {
                 {values.map((value, index) => (
                   <div
                     key={value.title}
-                    className="grid gap-3 border-b border-sand bg-cream p-4 transition-colors duration-500 last:border-b-0 hover:bg-linen md:grid-cols-[52px_150px_1fr] md:items-center"
+                    className="group grid gap-3 border-b border-sand bg-cream p-4 transition-all duration-500 last:border-b-0 hover:bg-linen hover:pl-6 md:grid-cols-[52px_150px_1fr] md:items-center"
                   >
-                    <span className="font-serif text-2xl text-mocha/70">
+                    <span className="font-serif text-2xl text-mocha/70 transition-colors duration-500 group-hover:text-caramel">
                       {String(index + 1).padStart(2, "0")}
                     </span>
                     <div>
@@ -284,7 +303,7 @@ function AboutWork() {
                 <Reveal
                   key={item.label}
                   delay={index * 0.05}
-                  className="group grid min-h-[320px] grid-rows-[72px_30px_64px_1fr] bg-cream p-6 transition-colors duration-500 hover:bg-linen"
+                  className="group grid min-h-[320px] grid-rows-[72px_30px_64px_1fr] bg-cream p-6 transition-all duration-500 hover:-translate-y-1 hover:bg-linen"
                 >
                   <span className="font-display text-5xl font-bold leading-none text-mocha/55 transition-colors duration-500 group-hover:text-caramel">
                     {String(index + 1).padStart(2, "0")}

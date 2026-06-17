@@ -113,22 +113,31 @@ export function PulseFeature() {
               to="/projects/pulse"
               state={{ returnTo: "#projects" }}
               onClick={() => window.scrollTo({ top: 0, left: 0, behavior: "auto" })}
-              className="mt-6 inline-flex rounded-full bg-espresso px-5 py-2.5 text-[12px] font-semibold tracking-wide text-cream shadow-[0_18px_40px_-24px_rgba(39,31,25,0.8)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-caramel"
+              className="group mt-6 inline-flex items-center gap-2 rounded-full bg-espresso px-5 py-2.5 text-[12px] font-semibold tracking-wide text-cream shadow-[0_18px_40px_-24px_rgba(39,31,25,0.8)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-caramel active:scale-[0.98]"
             >
               프로젝트 상세보기
+              <span className="transition-transform duration-300 group-hover:translate-x-1">
+                ↗
+              </span>
             </Link>
           </div>
         </div>
 
         {/* 대형 커버 */}
         <Reveal className="mt-12">
-          <div className="overflow-hidden rounded-[2rem] border border-sand bg-sand/40 p-3 shadow-[0_50px_110px_-50px_rgba(74,58,44,0.55)]">
+          <motion.div
+            whileHover={{ y: -10, rotate: 0.25 }}
+            whileTap={{ scale: 0.99 }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="interactive-card relative overflow-hidden rounded-[2rem] border border-sand bg-sand/40 p-3 shadow-[0_50px_110px_-50px_rgba(74,58,44,0.55)]"
+          >
+            <span className="accent-spark absolute right-6 top-6 z-10">✦</span>
             <img
               src={pulse.cover}
               alt="PULSE 랜딩"
               className="warm-screenshot aspect-[16/9] w-full rounded-[1.4rem] object-cover object-top"
             />
-          </div>
+          </motion.div>
         </Reveal>
 
         {/* 개요 + 루프 */}
@@ -141,9 +150,12 @@ export function PulseFeature() {
               to="/projects/pulse"
               state={{ returnTo: "#projects" }}
               onClick={() => window.scrollTo({ top: 0, left: 0, behavior: "auto" })}
-              className="mt-7 inline-flex rounded-full bg-espresso px-5 py-2.5 text-[12px] font-semibold tracking-wide text-cream shadow-[0_18px_40px_-24px_rgba(39,31,25,0.8)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-caramel lg:hidden"
+              className="group mt-7 inline-flex items-center gap-2 rounded-full bg-espresso px-5 py-2.5 text-[12px] font-semibold tracking-wide text-cream shadow-[0_18px_40px_-24px_rgba(39,31,25,0.8)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-caramel active:scale-[0.98] lg:hidden"
             >
               프로젝트 상세보기
+              <span className="transition-transform duration-300 group-hover:translate-x-1">
+                ↗
+              </span>
             </Link>
           </Reveal>
           <div className="space-y-5 text-[15px] leading-relaxed text-coffee lg:col-span-6 lg:col-start-7">

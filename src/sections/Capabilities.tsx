@@ -31,10 +31,10 @@ export function Capabilities() {
               <Reveal
                 key={s.label}
                 delay={(i % 3) * 0.06}
-                className="bg-cream p-6 transition-colors duration-500 hover:bg-linen"
+                className="group interactive-card bg-cream p-6 transition-all duration-500 hover:-translate-y-1 hover:bg-linen"
               >
                 <div className="flex items-center gap-3">
-                  <span className="grid h-9 w-9 place-items-center rounded-lg bg-espresso/90 font-serif text-sm text-cream">
+                  <span className="grid h-9 w-9 place-items-center rounded-lg bg-espresso/90 font-serif text-sm text-cream transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-110 group-hover:bg-caramel">
                     {s.icon}
                   </span>
                   <h3 className="text-base font-semibold text-espresso">

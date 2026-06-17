@@ -37,10 +37,12 @@ function MainProject({ p }: { p: Project }) {
     >
       <Reveal>
         <motion.div
-          whileHover={{ y: -8 }}
+          whileHover={{ y: -10, rotate: -0.35 }}
+          whileTap={{ scale: 0.985 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="group relative overflow-hidden rounded-[1.75rem] border border-sand bg-sand/60 p-3 shadow-[0_40px_90px_-40px_rgba(74,58,44,0.55)]"
+          className="group interactive-card relative overflow-hidden rounded-[1.75rem] border border-sand bg-sand/60 p-3 shadow-[0_40px_90px_-40px_rgba(74,58,44,0.55)]"
         >
+          <span className="accent-spark absolute right-5 top-5 z-10">✦</span>
           <div className="overflow-hidden rounded-2xl bg-cream">
             <img
               src={p.cover}
@@ -123,9 +125,12 @@ function MainProject({ p }: { p: Project }) {
             to={`/projects/${p.id}`}
             state={{ returnTo: `#project-${p.id}` }}
             onClick={() => window.scrollTo({ top: 0, left: 0, behavior: "auto" })}
-            className="mt-7 inline-flex rounded-full bg-caramel px-5 py-2.5 text-[12px] font-semibold tracking-wide text-cream shadow-[0_18px_40px_-24px_rgba(111,75,43,0.8)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-espresso"
+            className="group mt-7 inline-flex items-center gap-2 rounded-full bg-caramel px-5 py-2.5 text-[12px] font-semibold tracking-wide text-cream shadow-[0_18px_40px_-24px_rgba(111,75,43,0.8)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-espresso active:scale-[0.98]"
           >
-            Case Study 보기
+            프로젝트 상세보기
+            <span className="transition-transform duration-300 group-hover:translate-x-1">
+              ↗
+            </span>
           </Link>
         </Reveal>
       </div>
@@ -146,12 +151,14 @@ function SubProjectSection({
     <Reveal>
       <section className="grid min-h-[72vh] items-center gap-10 border-t border-sand py-20 sm:py-24 lg:grid-cols-2 lg:gap-16">
         <motion.div
-          whileHover={{ y: -6 }}
+          whileHover={{ y: -8, rotate: flip ? 0.35 : -0.35 }}
+          whileTap={{ scale: 0.985 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className={`group overflow-hidden rounded-[1.75rem] border border-sand bg-sand/45 p-3 shadow-[0_36px_80px_-44px_rgba(74,58,44,0.55)] ${
+          className={`group interactive-card relative overflow-hidden rounded-[1.75rem] border border-sand bg-sand/45 p-3 shadow-[0_36px_80px_-44px_rgba(74,58,44,0.55)] ${
             flip ? "lg:order-2" : ""
           }`}
         >
+          <span className="accent-spark absolute right-5 top-5 z-10">⌁</span>
           <div className="overflow-hidden rounded-2xl bg-cream">
             <img
               src={project.cover}
@@ -221,7 +228,7 @@ export function Work() {
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
         <Reveal className="mb-10 flex items-center gap-4 text-[12px] uppercase tracking-[0.3em] text-caramel">
           <span className="h-px w-10 bg-caramel/60" />
-          Project Rooms 02-04
+          Main Project 02-04
         </Reveal>
 
         <div className="space-y-4">
