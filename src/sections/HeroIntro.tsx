@@ -264,14 +264,14 @@ function ProfileStrengths() {
 
 function AboutWork() {
   return (
-    <section className="scroll-mt-28 bg-cream px-5 pt-10 pb-20 sm:px-9 sm:pt-12 sm:pb-24">
+    <section className="scroll-mt-48 bg-cream px-5 pt-32 pb-20 sm:px-9 sm:pt-40 sm:pb-24">
       <div className="mx-auto max-w-[1080px]">
         <Reveal>
           <p className="mb-5 flex items-center gap-3 text-[12px] font-semibold uppercase tracking-[0.32em] text-caramel">
             <span className="h-px w-10 bg-caramel/60" />
             Introduction
           </p>
-          <h2 className="max-w-4xl font-serif-ko text-[clamp(2rem,3vw,3.25rem)] leading-[1.32] tracking-tight text-espresso">
+          <h2 className="max-w-[860px] font-serif-ko text-[clamp(2rem,2.8vw,3.05rem)] leading-[1.32] tracking-tight text-espresso">
             안정적인 구조 위에 사용자의 행동을 이어 주는 백엔드 개발자가 되고자 합니다.
           </h2>
         </Reveal>

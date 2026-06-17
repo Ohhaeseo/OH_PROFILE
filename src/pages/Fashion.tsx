@@ -1,5 +1,10 @@
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  type MotionValue,
+} from "framer-motion";
 import { Link } from "react-router-dom";
 import { fashionIntro, looks, type Look } from "../data/fashion";
 
@@ -20,26 +25,25 @@ function EntryPull() {
 function MovingWord({
   text,
   reverse = false,
+  progress,
 }: {
   text: string;
   reverse?: boolean;
+  progress: MotionValue<number>;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
   const x = useTransform(
-    scrollYProgress,
+    progress,
     [0, 1],
-    reverse ? ["18vw", "-18vw"] : ["-18vw", "18vw"],
+    reverse ? ["20vw", "-20vw"] : ["-20vw", "20vw"],
   );
+  const opacity = useTransform(progress, [0, 0.5, 1], [0.06, 0.34, 0.06]);
+  const scale = useTransform(progress, [0, 0.5, 1], [0.86, 1.08, 0.86]);
 
   return (
-    <div ref={ref} className="pointer-events-none absolute inset-x-0 top-1/2 z-20 -translate-y-1/2 overflow-hidden">
+    <div className="pointer-events-none absolute inset-x-0 top-1/2 z-20 -translate-y-1/2 overflow-hidden">
       <motion.span
-        style={{ x }}
-        className="block whitespace-nowrap font-display text-[26vw] uppercase leading-none text-bone/[0.09] mix-blend-difference"
+        style={{ x, opacity, scale }}
+        className="block origin-center whitespace-nowrap font-display text-[27vw] uppercase leading-none text-bone mix-blend-difference"
       >
         {text} {text}
       </motion.span>
@@ -49,17 +53,31 @@ function MovingWord({
 
 function LookCard({ look, index }: { look: Look; index: number }) {
   const reverse = index % 2 === 1;
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+  const imageScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.92, 1, 0.94]);
+  const imageOpacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.72, 1, 0.78]);
+
   return (
     <motion.figure
+      ref={ref}
       initial={{ opacity: 0, y: 54, scale: 0.98 }}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, margin: "0px 0px -12% 0px" }}
       transition={{ duration: 0.95, ease: EASE, delay: (index % 3) * 0.05 }}
       className="group relative grid min-h-[96svh] items-center overflow-hidden border-t border-white/10 py-20 lg:grid-cols-[0.85fr_1fr] lg:gap-16"
     >
-      <MovingWord text={look.title.replaceAll(" ", "")} reverse={reverse} />
+      <MovingWord
+        text={look.title.replaceAll(" ", "")}
+        reverse={reverse}
+        progress={scrollYProgress}
+      />
       <div className={`relative z-10 ${reverse ? "lg:order-2" : ""}`}>
         <motion.div
+          style={{ scale: imageScale, opacity: imageOpacity }}
           whileHover={{ y: -10, rotate: reverse ? 0.4 : -0.4 }}
           transition={{ duration: 0.7, ease: EASE }}
           className="relative overflow-hidden rounded-[2rem] bg-[#1b1a18] shadow-[0_50px_120px_-70px_rgba(0,0,0,0.9)]"
