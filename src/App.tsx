@@ -34,12 +34,16 @@ function ScrollManager() {
 
     if (!location.hash) return;
 
-    const timer = window.setTimeout(() => {
+    const scrollToHashTarget = () => {
       const target = document.getElementById(
         decodeURIComponent(location.hash.slice(1)),
       );
       if (!target) return;
-      const top = target.getBoundingClientRect().top + window.scrollY;
+      const offset = window.innerWidth < 768 ? 72 : 96;
+      const top = Math.max(
+        0,
+        target.getBoundingClientRect().top + window.scrollY - offset,
+      );
       document.documentElement.scrollTop = top;
       document.body.scrollTop = top;
       window.scrollTo({ top, left: 0, behavior: "auto" });
@@ -49,10 +53,14 @@ function ScrollManager() {
             scrollTo: (target: number | HTMLElement, options?: object) => void;
           };
         }
-      ).__portfolioLenis?.scrollTo(target, { immediate: true, force: true });
-    }, 80);
+      ).__portfolioLenis?.scrollTo(top, { immediate: true, force: true });
+    };
 
-    return () => window.clearTimeout(timer);
+    const timers = [80, 360, 900].map((delay) =>
+      window.setTimeout(scrollToHashTarget, delay),
+    );
+
+    return () => timers.forEach((timer) => window.clearTimeout(timer));
   }, [location.hash, location.pathname]);
 
   return null;

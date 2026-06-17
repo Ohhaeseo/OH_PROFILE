@@ -421,6 +421,10 @@ function imageClassName(project: Project, extra = "") {
   return `warm-screenshot w-full rounded-[1.35rem] ${fit} ${extra}`;
 }
 
+function defaultReturnTarget(projectId: string) {
+  return projectId === "pulse" ? "#projects" : `#project-${projectId}`;
+}
+
 function HoldToProjects({ to }: { to: string }) {
   const navigate = useNavigate();
   const timerRef = useRef<number | null>(null);
@@ -444,7 +448,7 @@ function HoldToProjects({ to }: { to: string }) {
         onPointerUp={cancel}
         onPointerLeave={cancel}
         onPointerCancel={cancel}
-        className="group relative isolate inline-flex min-w-[260px] overflow-hidden rounded-full border border-espresso/15 bg-espresso px-6 py-4 text-[12px] font-semibold tracking-[0.18em] text-cream shadow-[0_24px_70px_-42px_rgba(43,33,26,0.9)] transition-transform duration-300 hover:-translate-y-0.5 active:scale-[0.98]"
+        className="group relative isolate inline-flex w-full justify-center overflow-hidden rounded-full border border-espresso/15 bg-espresso px-6 py-4 text-center text-[12px] font-semibold tracking-[0.18em] text-cream shadow-[0_24px_70px_-42px_rgba(43,33,26,0.9)] transition-transform duration-300 hover:-translate-y-0.5 active:scale-[0.98] sm:w-auto sm:min-w-[260px]"
       >
         <motion.span
           aria-hidden
@@ -458,7 +462,7 @@ function HoldToProjects({ to }: { to: string }) {
       <button
         type="button"
         onClick={goBack}
-        className="inline-flex rounded-full border border-caramel/35 px-6 py-4 text-[12px] font-semibold tracking-[0.18em] text-coffee transition-colors duration-300 hover:bg-caramel hover:text-cream"
+        className="inline-flex w-full justify-center rounded-full border border-caramel/35 px-6 py-4 text-center text-[12px] font-semibold tracking-[0.18em] text-coffee transition-colors duration-300 hover:bg-caramel hover:text-cream sm:w-auto"
       >
         바로 돌아가기
       </button>
@@ -506,17 +510,18 @@ export function ProjectDetail() {
     "--case-page": skin.page,
   } as CSSProperties;
   const returnTo =
-    (location.state as { returnTo?: string } | null)?.returnTo ?? "#projects";
+    (location.state as { returnTo?: string } | null)?.returnTo ??
+    defaultReturnTarget(project.id);
 
   return (
     <main className="project-detail-shell min-h-screen text-espresso" style={skinStyle}>
       <section
-        className="relative overflow-hidden px-5 pb-10 pt-28 text-cream sm:px-9 sm:pt-36"
+        className="relative overflow-hidden px-5 pb-10 pt-24 text-cream sm:px-10 sm:pt-32 lg:px-16 xl:px-20"
         style={{ background: skin.hero }}
       >
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-cream/25" />
         <div className="pointer-events-none absolute left-1/2 top-20 h-[72vh] w-px bg-cream/10" />
-        <div className="mx-auto max-w-[1480px]">
+        <div className="mx-auto max-w-[1240px]">
           <Link
             to={`/${returnTo}`}
             replace
@@ -528,7 +533,7 @@ export function ProjectDetail() {
             프로젝트 목록으로
           </Link>
 
-          <div className="mt-14 grid gap-12 lg:grid-cols-[1fr_430px] lg:items-end">
+          <div className="mt-14 grid min-w-0 gap-10 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-end">
             <div>
               <div
                 className="type-eyebrow flex flex-wrap items-center gap-3 text-[11px]"
@@ -541,10 +546,10 @@ export function ProjectDetail() {
                 />
                 <span>{detail.category}</span>
               </div>
-              <h1 className="type-serif-title mt-7 text-[clamp(4.8rem,13vw,14rem)] leading-[0.82] text-cream">
+              <h1 className="type-serif-title mt-7 break-words text-[clamp(3.8rem,16vw,12rem)] leading-[0.82] text-cream">
                 {project.title}
               </h1>
-              <p className="mt-8 max-w-4xl text-[clamp(1.2rem,2vw,2rem)] leading-relaxed text-cream/76">
+              <p className="mt-8 max-w-3xl text-[clamp(1.05rem,2vw,1.7rem)] leading-relaxed text-cream/76">
                 {project.subtitle}
               </p>
             </div>
@@ -579,14 +584,14 @@ export function ProjectDetail() {
               alt={project.title}
               whileHover={{ y: -8, rotate: -0.25 }}
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className={imageClassName(project, "aspect-[16/8.1] bg-cream")}
+              className={imageClassName(project, "aspect-[4/3] bg-cream sm:aspect-[16/8.1]")}
             />
           </div>
         </div>
       </section>
 
-      <section className="project-soft-section border-b border-sand px-5 py-10 sm:px-9">
-        <div className="mx-auto grid max-w-[1320px] gap-px overflow-hidden rounded-[1.3rem] border border-sand bg-sand md:grid-cols-3">
+      <section className="project-soft-section border-b border-sand px-5 py-10 sm:px-10 lg:px-16 xl:px-20">
+        <div className="mx-auto grid max-w-[1120px] gap-px overflow-hidden rounded-[1.3rem] border border-sand bg-sand md:grid-cols-3">
           {[
             ["Intent", detail.intent],
             ["My Role", detail.role],
@@ -604,8 +609,8 @@ export function ProjectDetail() {
         </div>
       </section>
 
-      <section className="px-5 py-20 sm:px-9 sm:py-28">
-        <div className="mx-auto max-w-[1320px]">
+      <section className="px-5 py-16 sm:px-10 sm:py-24 lg:px-16 xl:px-20">
+        <div className="mx-auto max-w-[1120px]">
           <Reveal>
             <p className="type-eyebrow text-[12px] text-caramel">
               프로젝트 개요
@@ -637,8 +642,8 @@ export function ProjectDetail() {
         </div>
       </section>
 
-      <section className="bg-espresso px-5 py-20 text-cream sm:px-9 sm:py-28">
-        <div className="mx-auto max-w-[1320px]">
+      <section className="bg-espresso px-5 py-16 text-cream sm:px-10 sm:py-24 lg:px-16 xl:px-20">
+        <div className="mx-auto max-w-[1120px]">
           <Reveal>
             <p className="type-eyebrow text-[12px] text-caramel">
               프로젝트 구조
@@ -692,8 +697,8 @@ export function ProjectDetail() {
         </div>
       </section>
 
-      <section className="px-5 py-20 sm:px-9 sm:py-28">
-        <div className="mx-auto max-w-[1220px]">
+      <section className="px-5 py-16 sm:px-10 sm:py-24 lg:px-16 xl:px-20">
+        <div className="mx-auto max-w-[1040px]">
           {detail.study.map((block, index) => (
             <Reveal
               key={block.title}
@@ -734,8 +739,8 @@ export function ProjectDetail() {
         </div>
       </section>
 
-      <section className="project-soft-section px-5 py-20 sm:px-9 sm:py-28">
-        <div className="mx-auto max-w-[1320px]">
+      <section className="project-soft-section px-5 py-16 sm:px-10 sm:py-24 lg:px-16 xl:px-20">
+        <div className="mx-auto max-w-[1120px]">
           <Reveal className="rounded-[1.75rem] border border-sand bg-cream p-7 sm:p-9">
             <div className="grid gap-8 lg:grid-cols-[320px_1fr]">
               <div>
@@ -769,8 +774,8 @@ export function ProjectDetail() {
       </section>
 
       {project.id !== "dspy-ad" && project.gallery && project.gallery.length > 0 && (
-        <section className="px-5 py-20 sm:px-9 sm:py-28">
-          <div className="mx-auto max-w-[1320px]">
+        <section className="px-5 py-16 sm:px-10 sm:py-24 lg:px-16 xl:px-20">
+          <div className="mx-auto max-w-[1120px]">
             <Reveal>
               <p className="type-eyebrow text-[12px] text-caramel">
                 화면 자료
@@ -824,8 +829,8 @@ export function ProjectDetail() {
       )}
 
       {isPulse && (
-        <section className="bg-espresso px-5 py-24 text-cream sm:px-9 sm:py-32">
-          <div className="mx-auto max-w-[1280px]">
+        <section className="bg-espresso px-5 py-20 text-cream sm:px-10 sm:py-28 lg:px-16 xl:px-20">
+          <div className="mx-auto max-w-[1100px]">
             <Reveal>
               <p className="text-[12px] font-semibold uppercase tracking-[0.3em] text-caramel">
                 PULSE Flow
@@ -904,8 +909,8 @@ export function ProjectDetail() {
         </section>
       )}
 
-      <section className="px-5 py-20 sm:px-9 sm:py-24">
-        <div className="mx-auto flex max-w-[1320px] flex-col justify-between gap-7 border-t border-sand pt-9 lg:flex-row lg:items-center">
+      <section className="px-5 py-16 sm:px-10 sm:py-20 lg:px-16 xl:px-20">
+        <div className="mx-auto flex max-w-[1120px] flex-col justify-between gap-7 border-t border-sand pt-9 lg:flex-row lg:items-center">
           <div>
             <p className="type-eyebrow text-[12px] text-caramel">
               Back to Projects
