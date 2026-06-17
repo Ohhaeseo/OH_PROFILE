@@ -1,5 +1,5 @@
 import { motion, type Variants } from "framer-motion";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 const variants: Variants = {
   hidden: { opacity: 0, y: 28 },
@@ -15,17 +15,20 @@ export function Reveal({
   children,
   delay = 0,
   className,
+  style,
   as = "div",
 }: {
   children: ReactNode;
   delay?: number;
   className?: string;
+  style?: CSSProperties;
   as?: "div" | "span" | "li" | "section";
 }) {
   const MotionTag = motion[as];
   return (
     <MotionTag
       className={className}
+      style={style}
       variants={variants}
       initial="hidden"
       whileInView="show"

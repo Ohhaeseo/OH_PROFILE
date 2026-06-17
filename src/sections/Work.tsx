@@ -125,7 +125,7 @@ function MainProject({ p }: { p: Project }) {
             onClick={() => window.scrollTo({ top: 0, left: 0, behavior: "auto" })}
             className="mt-7 inline-flex rounded-full bg-caramel px-5 py-2.5 text-[12px] font-semibold tracking-wide text-cream shadow-[0_18px_40px_-24px_rgba(111,75,43,0.8)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-espresso"
           >
-            프로젝트 상세보기
+            Case Study 보기
           </Link>
         </Reveal>
       </div>
@@ -221,7 +221,7 @@ export function Work() {
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
         <Reveal className="mb-10 flex items-center gap-4 text-[12px] uppercase tracking-[0.3em] text-caramel">
           <span className="h-px w-10 bg-caramel/60" />
-          Main Project 02-04
+          Project Rooms 02-04
         </Reveal>
 
         <div className="space-y-4">

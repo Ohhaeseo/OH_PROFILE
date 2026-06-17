@@ -1,10 +1,55 @@
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, type CSSProperties } from "react";
+import { motion } from "framer-motion";
 import { Link, Navigate, useLocation, useParams } from "react-router-dom";
 import { projects, type Project } from "../data/projects";
 import { pulse, contributions } from "../data/pulse";
 import { Reveal } from "../components/Reveal";
 
 const detailProjectIds = ["pulse", "vr-live", "nullnull", "dspy-ad"];
+
+type RoomSkin = {
+  room: string;
+  accent: string;
+  second: string;
+  soft: string;
+  onDark: string;
+  objects: string[];
+};
+
+const roomSkins: Record<string, RoomSkin> = {
+  pulse: {
+    room: "AI Marketing Room",
+    accent: "#ff5a36",
+    second: "#002b7a",
+    soft: "#fff1ed",
+    onDark: "#ffb39e",
+    objects: ["Insight", "Reels", "Dashboard", "Pro Match"],
+  },
+  "vr-live": {
+    room: "Immersive Practice Room",
+    accent: "#7c5cff",
+    second: "#00b8d9",
+    soft: "#f1efff",
+    onDark: "#cabdff",
+    objects: ["PDF", "Voice", "STT", "Feedback"],
+  },
+  nullnull: {
+    room: "Nowcasting Room",
+    accent: "#4d5eff",
+    second: "#91ad00",
+    soft: "#eef1ff",
+    onDark: "#b8c0ff",
+    objects: ["Crowd", "Weather", "Transit", "Alternative"],
+  },
+  "dspy-ad": {
+    room: "Prompt Research Room",
+    accent: "#d0a06b",
+    second: "#f0c996",
+    soft: "#f5eee5",
+    onDark: "#f0c996",
+    objects: ["Hook", "Showcase", "VQA", "CTA"],
+  },
+};
 
 type DetailCopy = {
   label: string;
@@ -398,11 +443,18 @@ export function ProjectDetail() {
 
   const detail = details[project.id];
   const isPulse = project.id === "pulse";
+  const skin = roomSkins[project.id];
+  const skinStyle = {
+    "--case-accent": skin.accent,
+    "--case-second": skin.second,
+    "--case-soft": skin.soft,
+    "--case-on-dark": skin.onDark,
+  } as CSSProperties;
   const returnTo =
     (location.state as { returnTo?: string } | null)?.returnTo ?? "#projects";
 
   return (
-    <main className="min-h-screen bg-cream text-espresso">
+    <main className="min-h-screen bg-cream text-espresso" style={skinStyle}>
       <section className="relative overflow-hidden bg-espresso px-5 pb-10 pt-28 text-cream sm:px-9 sm:pt-36">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-cream/25" />
         <div className="pointer-events-none absolute left-1/2 top-20 h-[72vh] w-px bg-cream/10" />
@@ -420,10 +472,18 @@ export function ProjectDetail() {
 
           <div className="mt-14 grid gap-12 lg:grid-cols-[1fr_430px] lg:items-end">
             <div>
-              <div className="flex flex-wrap items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-caramel">
+              <div
+                className="flex flex-wrap items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.28em]"
+                style={{ color: skin.onDark }}
+              >
                 <span>{detail.label}</span>
-                <span className="h-px w-10 bg-caramel/60" />
+                <span
+                  className="h-px w-10"
+                  style={{ backgroundColor: skin.onDark }}
+                />
                 <span>{detail.category}</span>
+                <span className="hidden sm:inline">/</span>
+                <span>{skin.room}</span>
               </div>
               <h1 className="mt-7 font-serif text-[clamp(4.8rem,13vw,14rem)] leading-[0.82] tracking-tight text-cream">
                 {project.title}
@@ -434,8 +494,11 @@ export function ProjectDetail() {
             </div>
 
             <aside className="rounded-[1.4rem] border border-cream/15 bg-cream/[0.06] p-6 shadow-[0_30px_100px_-65px_rgba(0,0,0,0.85)] backdrop-blur">
-              <p className="text-[12px] font-semibold uppercase tracking-[0.26em] text-caramel">
-                Case Info
+              <p
+                className="text-[12px] font-semibold uppercase tracking-[0.26em]"
+                style={{ color: skin.onDark }}
+              >
+                Info Dock
               </p>
               <div className="mt-6 space-y-5 text-[14px] leading-relaxed text-cream/75">
                 <p>{project.year}</p>
@@ -456,11 +519,32 @@ export function ProjectDetail() {
 
           <div className="relative mt-14 overflow-hidden rounded-[2rem] border border-cream/15 bg-cream/10 p-3 shadow-[0_70px_160px_-70px_rgba(0,0,0,0.9)]">
             <div className="absolute left-6 top-6 z-10 rounded-full bg-espresso/80 px-4 py-2 text-[11px] uppercase tracking-[0.24em] text-cream/70 backdrop-blur">
-              Case Study View
+              Room Entrance
             </div>
-            <img
+            <div className="pointer-events-none absolute inset-0 z-10 hidden lg:block">
+              {skin.objects.map((object, index) => (
+                <motion.span
+                  key={object}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.25 + index * 0.08, duration: 0.7 }}
+                  className="absolute rounded-full border bg-espresso/55 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] backdrop-blur"
+                  style={{
+                    color: skin.onDark,
+                    borderColor: `${skin.accent}80`,
+                    left: `${12 + index * 18}%`,
+                    top: index % 2 === 0 ? "78%" : "15%",
+                  }}
+                >
+                  {object}
+                </motion.span>
+              ))}
+            </div>
+            <motion.img
               src={project.cover}
               alt={project.title}
+              whileHover={{ y: -8, rotate: -0.25 }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
               className={imageClassName(project, "aspect-[16/8.1] bg-cream")}
             />
           </div>
@@ -490,7 +574,7 @@ export function ProjectDetail() {
         <div className="mx-auto max-w-[1320px]">
           <Reveal>
             <p className="text-[12px] font-semibold uppercase tracking-[0.3em] text-caramel">
-              Overview
+              Room Entrance
             </p>
             <p className="mt-5 max-w-5xl text-[22px] leading-[1.9] text-coffee">
               {detail.lead}
@@ -523,7 +607,7 @@ export function ProjectDetail() {
         <div className="mx-auto max-w-[1320px]">
           <Reveal>
             <p className="text-[12px] font-semibold uppercase tracking-[0.3em] text-caramel">
-              System Logic
+              Room Logic
             </p>
             <h2 className="mt-5 max-w-4xl font-serif-ko text-4xl leading-tight text-cream sm:text-6xl">
               {detail.deepTitle}
@@ -539,6 +623,7 @@ export function ProjectDetail() {
                 key={card.title}
                 delay={index * 0.04}
                 className="bg-espresso p-7"
+                style={{ borderTop: `2px solid ${skin.accent}` }}
               >
                 <span className="font-serif text-4xl text-caramel">
                   {String(index + 1).padStart(2, "0")}
@@ -621,7 +706,7 @@ export function ProjectDetail() {
             <div className="grid gap-8 lg:grid-cols-[320px_1fr]">
               <div>
                 <p className="text-[12px] font-semibold uppercase tracking-[0.28em] text-caramel">
-                  Source Based
+                  Evidence Dock
                 </p>
                 <h3 className="mt-4 text-2xl font-semibold text-espresso">
                   {detail.evidenceTitle}
@@ -654,7 +739,7 @@ export function ProjectDetail() {
           <div className="mx-auto max-w-[1320px]">
             <Reveal>
               <p className="text-[12px] font-semibold uppercase tracking-[0.3em] text-caramel">
-                Screens & Materials
+                Evidence Frames
               </p>
               <h2 className="mt-4 font-serif-ko text-4xl leading-tight text-espresso sm:text-5xl">
                 화면과 자료를 프로젝트별 맥락에 맞게 담았습니다.
@@ -665,7 +750,15 @@ export function ProjectDetail() {
               {[project.cover, ...(project.gallery ?? [])].map(
                 (image, index) => (
                   <Reveal key={image} delay={index * 0.04}>
-                    <div className="overflow-hidden rounded-[1.6rem] border border-sand bg-sand/35 p-2">
+                    <motion.figure
+                      whileHover={{
+                        y: -8,
+                        rotate: index % 2 === 0 ? -0.25 : 0.25,
+                      }}
+                      transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+                      className="group overflow-hidden rounded-[1.6rem] border border-sand bg-sand/35 p-2 shadow-[0_34px_80px_-52px_rgba(74,58,44,0.68)]"
+                    >
+                      <div className="overflow-hidden rounded-[1.35rem] bg-cream">
                       <img
                         src={image}
                         alt=""
@@ -675,7 +768,19 @@ export function ProjectDetail() {
                           "aspect-[4/3] bg-cream",
                         )}
                       />
-                    </div>
+                      </div>
+                      <figcaption className="flex items-center justify-between px-3 pb-2 pt-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-caramel">
+                        <span>
+                          {index === 0
+                            ? "Main Wall"
+                            : `Evidence ${String(index).padStart(2, "0")}`}
+                        </span>
+                        <span
+                          className="h-2 w-2 rounded-full"
+                          style={{ backgroundColor: skin.accent }}
+                        />
+                      </figcaption>
+                    </motion.figure>
                   </Reveal>
                 ),
               )}
