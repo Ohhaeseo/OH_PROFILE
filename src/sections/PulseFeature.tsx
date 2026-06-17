@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import { pulse, contributions, type Contribution } from "../data/pulse";
 import { Reveal } from "../components/Reveal";
+import { ProjectDetailLink } from "../components/ProjectDetailLink";
 
 function ContributionBlock({ c, flip }: { c: Contribution; flip: boolean }) {
   return (
@@ -109,17 +109,11 @@ export function PulseFeature() {
                 </span>
               ))}
             </div>
-            <Link
+            <ProjectDetailLink
               to="/projects/pulse"
-              state={{ returnTo: "#projects" }}
-              onClick={() => window.scrollTo({ top: 0, left: 0, behavior: "auto" })}
+              returnTo="#projects"
               className="group mt-6 inline-flex items-center gap-2 rounded-full bg-espresso px-5 py-2.5 text-[12px] font-semibold tracking-wide text-cream shadow-[0_18px_40px_-24px_rgba(39,31,25,0.8)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-caramel active:scale-[0.98]"
-            >
-              프로젝트 상세보기
-              <span className="transition-transform duration-300 group-hover:translate-x-1">
-                ↗
-              </span>
-            </Link>
+            />
           </div>
         </div>
 
@@ -146,17 +140,11 @@ export function PulseFeature() {
             <p className="font-serif-ko text-2xl leading-snug text-espresso sm:text-[1.7rem]">
               {pulse.tagline}
             </p>
-            <Link
+            <ProjectDetailLink
               to="/projects/pulse"
-              state={{ returnTo: "#projects" }}
-              onClick={() => window.scrollTo({ top: 0, left: 0, behavior: "auto" })}
+              returnTo="#projects"
               className="group mt-7 inline-flex items-center gap-2 rounded-full bg-espresso px-5 py-2.5 text-[12px] font-semibold tracking-wide text-cream shadow-[0_18px_40px_-24px_rgba(39,31,25,0.8)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-caramel active:scale-[0.98] lg:hidden"
-            >
-              프로젝트 상세보기
-              <span className="transition-transform duration-300 group-hover:translate-x-1">
-                ↗
-              </span>
-            </Link>
+            />
           </Reveal>
           <div className="space-y-5 text-[15px] leading-relaxed text-coffee lg:col-span-6 lg:col-start-7">
             {pulse.overview.slice(0, 2).map((p, i) => (

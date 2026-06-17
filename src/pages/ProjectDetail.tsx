@@ -1,6 +1,6 @@
-import { useLayoutEffect, type CSSProperties } from "react";
+import { useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import { motion } from "framer-motion";
-import { Link, Navigate, useLocation, useParams } from "react-router-dom";
+import { Link, Navigate, useLocation, useNavigate, useParams } from "react-router-dom";
 import { projects, type Project } from "../data/projects";
 import { pulse, contributions } from "../data/pulse";
 import { Reveal } from "../components/Reveal";
@@ -13,6 +13,8 @@ type RoomSkin = {
   second: string;
   soft: string;
   onDark: string;
+  page: string;
+  hero: string;
 };
 
 const roomSkins: Record<string, RoomSkin> = {
@@ -22,6 +24,9 @@ const roomSkins: Record<string, RoomSkin> = {
     second: "#002b7a",
     soft: "#fff1ed",
     onDark: "#ffb39e",
+    page: "#f7ece5",
+    hero:
+      "radial-gradient(circle at 82% 24%, rgba(255,90,54,0.2), transparent 28rem), linear-gradient(135deg, #271a14 0%, #2b211a 48%, #18284f 100%)",
   },
   "vr-live": {
     room: "Immersive Practice Room",
@@ -29,6 +34,9 @@ const roomSkins: Record<string, RoomSkin> = {
     second: "#00b8d9",
     soft: "#f1efff",
     onDark: "#cabdff",
+    page: "#eeeaf7",
+    hero:
+      "radial-gradient(circle at 78% 22%, rgba(124,92,255,0.22), transparent 28rem), linear-gradient(135deg, #1d162c 0%, #2b211a 52%, #123642 100%)",
   },
   nullnull: {
     room: "Nowcasting Room",
@@ -36,6 +44,9 @@ const roomSkins: Record<string, RoomSkin> = {
     second: "#91ad00",
     soft: "#eef1ff",
     onDark: "#b8c0ff",
+    page: "#edf0e6",
+    hero:
+      "radial-gradient(circle at 80% 20%, rgba(77,94,255,0.2), transparent 28rem), linear-gradient(135deg, #171b36 0%, #2b211a 52%, #3a3d1d 100%)",
   },
   "dspy-ad": {
     room: "Prompt Research Room",
@@ -43,6 +54,9 @@ const roomSkins: Record<string, RoomSkin> = {
     second: "#f0c996",
     soft: "#f5eee5",
     onDark: "#f0c996",
+    page: "#f1e7da",
+    hero:
+      "radial-gradient(circle at 80% 18%, rgba(208,160,107,0.25), transparent 30rem), linear-gradient(135deg, #181511 0%, #2b211a 54%, #3f2f1e 100%)",
   },
 };
 
@@ -407,6 +421,51 @@ function imageClassName(project: Project, extra = "") {
   return `warm-screenshot w-full rounded-[1.35rem] ${fit} ${extra}`;
 }
 
+function HoldToProjects({ to }: { to: string }) {
+  const navigate = useNavigate();
+  const timerRef = useRef<number | null>(null);
+  const [holding, setHolding] = useState(false);
+
+  const goBack = () => navigate(`/${to}`, { replace: true });
+  const start = () => {
+    setHolding(true);
+    timerRef.current = window.setTimeout(goBack, 1150);
+  };
+  const cancel = () => {
+    setHolding(false);
+    if (timerRef.current) window.clearTimeout(timerRef.current);
+  };
+
+  return (
+    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+      <button
+        type="button"
+        onPointerDown={start}
+        onPointerUp={cancel}
+        onPointerLeave={cancel}
+        onPointerCancel={cancel}
+        className="group relative isolate inline-flex min-w-[260px] overflow-hidden rounded-full border border-espresso/15 bg-espresso px-6 py-4 text-[12px] font-semibold tracking-[0.18em] text-cream shadow-[0_24px_70px_-42px_rgba(43,33,26,0.9)] transition-transform duration-300 hover:-translate-y-0.5 active:scale-[0.98]"
+      >
+        <motion.span
+          aria-hidden
+          className="absolute inset-y-0 left-0 -z-10 bg-caramel"
+          initial={false}
+          animate={{ width: holding ? "100%" : "0%" }}
+          transition={{ duration: holding ? 1.15 : 0.18, ease: "linear" }}
+        />
+        길게 눌러 프로젝트로 돌아가기
+      </button>
+      <button
+        type="button"
+        onClick={goBack}
+        className="inline-flex rounded-full border border-caramel/35 px-6 py-4 text-[12px] font-semibold tracking-[0.18em] text-coffee transition-colors duration-300 hover:bg-caramel hover:text-cream"
+      >
+        바로 돌아가기
+      </button>
+    </div>
+  );
+}
+
 export function ProjectDetail() {
   const { id } = useParams();
   const location = useLocation();
@@ -444,13 +503,17 @@ export function ProjectDetail() {
     "--case-second": skin.second,
     "--case-soft": skin.soft,
     "--case-on-dark": skin.onDark,
+    "--case-page": skin.page,
   } as CSSProperties;
   const returnTo =
     (location.state as { returnTo?: string } | null)?.returnTo ?? "#projects";
 
   return (
-    <main className="min-h-screen bg-cream text-espresso" style={skinStyle}>
-      <section className="relative overflow-hidden bg-espresso px-5 pb-10 pt-28 text-cream sm:px-9 sm:pt-36">
+    <main className="project-detail-shell min-h-screen text-espresso" style={skinStyle}>
+      <section
+        className="relative overflow-hidden px-5 pb-10 pt-28 text-cream sm:px-9 sm:pt-36"
+        style={{ background: skin.hero }}
+      >
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-cream/25" />
         <div className="pointer-events-none absolute left-1/2 top-20 h-[72vh] w-px bg-cream/10" />
         <div className="mx-auto max-w-[1480px]">
@@ -468,7 +531,7 @@ export function ProjectDetail() {
           <div className="mt-14 grid gap-12 lg:grid-cols-[1fr_430px] lg:items-end">
             <div>
               <div
-                className="flex flex-wrap items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.28em]"
+                className="type-eyebrow flex flex-wrap items-center gap-3 text-[11px]"
                 style={{ color: skin.onDark }}
               >
                 <span>{detail.label}</span>
@@ -478,7 +541,7 @@ export function ProjectDetail() {
                 />
                 <span>{detail.category}</span>
               </div>
-              <h1 className="mt-7 font-serif text-[clamp(4.8rem,13vw,14rem)] leading-[0.82] tracking-tight text-cream">
+              <h1 className="type-serif-title mt-7 text-[clamp(4.8rem,13vw,14rem)] leading-[0.82] text-cream">
                 {project.title}
               </h1>
               <p className="mt-8 max-w-4xl text-[clamp(1.2rem,2vw,2rem)] leading-relaxed text-cream/76">
@@ -488,7 +551,7 @@ export function ProjectDetail() {
 
             <aside className="rounded-[1.4rem] border border-cream/15 bg-cream/[0.06] p-6 shadow-[0_30px_100px_-65px_rgba(0,0,0,0.85)] backdrop-blur">
               <p
-                className="text-[12px] font-semibold uppercase tracking-[0.26em]"
+                className="type-eyebrow text-[12px]"
                 style={{ color: skin.onDark }}
               >
                 프로젝트 정보
@@ -522,7 +585,7 @@ export function ProjectDetail() {
         </div>
       </section>
 
-      <section className="border-b border-sand bg-linen px-5 py-10 sm:px-9">
+      <section className="project-soft-section border-b border-sand px-5 py-10 sm:px-9">
         <div className="mx-auto grid max-w-[1320px] gap-px overflow-hidden rounded-[1.3rem] border border-sand bg-sand md:grid-cols-3">
           {[
             ["Intent", detail.intent],
@@ -530,7 +593,7 @@ export function ProjectDetail() {
             ["Result", detail.result],
           ].map(([label, body], index) => (
             <Reveal key={label} delay={index * 0.04} className="bg-cream p-7">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-caramel">
+              <p className="type-eyebrow text-[11px] text-caramel">
                 {label}
               </p>
               <p className="mt-4 text-[14.5px] leading-[1.8] text-coffee">
@@ -544,7 +607,7 @@ export function ProjectDetail() {
       <section className="px-5 py-20 sm:px-9 sm:py-28">
         <div className="mx-auto max-w-[1320px]">
           <Reveal>
-            <p className="text-[12px] font-semibold uppercase tracking-[0.3em] text-caramel">
+            <p className="type-eyebrow text-[12px] text-caramel">
               프로젝트 개요
             </p>
             <p className="mt-5 max-w-5xl text-[22px] leading-[1.9] text-coffee">
@@ -559,7 +622,7 @@ export function ProjectDetail() {
                 delay={index * 0.05}
                 className="bg-cream p-8"
               >
-                <span className="font-display text-5xl font-bold text-mocha/45">
+                <span className="type-display text-5xl text-mocha/45">
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 <h2 className="mt-8 text-2xl font-semibold text-espresso">
@@ -577,10 +640,10 @@ export function ProjectDetail() {
       <section className="bg-espresso px-5 py-20 text-cream sm:px-9 sm:py-28">
         <div className="mx-auto max-w-[1320px]">
           <Reveal>
-            <p className="text-[12px] font-semibold uppercase tracking-[0.3em] text-caramel">
+            <p className="type-eyebrow text-[12px] text-caramel">
               프로젝트 구조
             </p>
-            <h2 className="mt-5 max-w-4xl font-serif-ko text-4xl leading-tight text-cream sm:text-6xl">
+            <h2 className="type-korean-title mt-5 max-w-4xl text-4xl leading-tight text-cream sm:text-6xl">
               {detail.deepTitle}
             </h2>
             <p className="mt-7 max-w-4xl text-[16px] leading-[1.9] text-cream/70">
@@ -596,7 +659,7 @@ export function ProjectDetail() {
                 className="bg-espresso p-7"
                 style={{ borderTop: `2px solid ${skin.accent}` }}
               >
-                <span className="font-serif text-4xl text-caramel">
+                <span className="type-serif-title text-4xl text-caramel">
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 <h3 className="mt-8 text-xl font-semibold text-cream">
@@ -610,13 +673,13 @@ export function ProjectDetail() {
           </div>
 
           <Reveal className="mt-12">
-            <p className="text-[12px] font-semibold uppercase tracking-[0.3em] text-caramel">
+            <p className="type-eyebrow text-[12px] text-caramel">
               Process
             </p>
             <div className="mt-5 grid gap-px overflow-hidden rounded-[1.5rem] border border-cream/15 bg-cream/15 md:grid-cols-3 lg:grid-cols-6">
               {detail.process.map((item, index) => (
                 <div key={item} className="bg-cream/[0.06] p-5">
-                  <span className="font-display text-4xl font-bold text-cream/25">
+                  <span className="type-display text-4xl text-cream/25">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <p className="mt-7 text-[14px] font-semibold leading-snug text-cream/85">
@@ -637,15 +700,15 @@ export function ProjectDetail() {
               className="grid gap-10 border-t border-sand py-14 lg:grid-cols-[280px_1fr]"
             >
               <div>
-                <p className="text-[12px] font-semibold uppercase tracking-[0.3em] text-caramel">
+                <p className="type-eyebrow text-[12px] text-caramel">
                   {block.kicker}
                 </p>
-                <span className="mt-8 block font-display text-7xl text-mocha/30">
+                <span className="type-display mt-8 block text-7xl text-mocha/30">
                   {String(index + 1).padStart(2, "0")}
                 </span>
               </div>
               <article>
-                <h2 className="font-serif-ko text-4xl leading-tight text-espresso sm:text-5xl">
+                <h2 className="type-korean-title text-4xl leading-tight text-espresso sm:text-5xl">
                   {block.title}
                 </h2>
                 <div className="mt-7 space-y-5 text-[16px] leading-[1.95] text-coffee">
@@ -671,12 +734,12 @@ export function ProjectDetail() {
         </div>
       </section>
 
-      <section className="bg-linen px-5 py-20 sm:px-9 sm:py-28">
+      <section className="project-soft-section px-5 py-20 sm:px-9 sm:py-28">
         <div className="mx-auto max-w-[1320px]">
           <Reveal className="rounded-[1.75rem] border border-sand bg-cream p-7 sm:p-9">
             <div className="grid gap-8 lg:grid-cols-[320px_1fr]">
               <div>
-                <p className="text-[12px] font-semibold uppercase tracking-[0.28em] text-caramel">
+                <p className="type-eyebrow text-[12px] text-caramel">
                   근거 자료
                 </p>
                 <h3 className="mt-4 text-2xl font-semibold text-espresso">
@@ -691,7 +754,7 @@ export function ProjectDetail() {
               <div className="grid gap-px overflow-hidden rounded-[1.2rem] border border-sand bg-sand md:grid-cols-2">
                 {detail.evidence.map((item) => (
                   <div key={item.label} className="bg-cream p-5">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-caramel">
+                    <p className="type-eyebrow text-[11px] text-caramel">
                       {item.label}
                     </p>
                     <p className="mt-3 text-[15px] leading-[1.7] text-coffee">
@@ -709,10 +772,10 @@ export function ProjectDetail() {
         <section className="px-5 py-20 sm:px-9 sm:py-28">
           <div className="mx-auto max-w-[1320px]">
             <Reveal>
-              <p className="text-[12px] font-semibold uppercase tracking-[0.3em] text-caramel">
+              <p className="type-eyebrow text-[12px] text-caramel">
                 화면 자료
               </p>
-              <h2 className="mt-4 font-serif-ko text-4xl leading-tight text-espresso sm:text-5xl">
+              <h2 className="type-korean-title mt-4 text-4xl leading-tight text-espresso sm:text-5xl">
                 화면과 자료를 프로젝트별 맥락에 맞게 담았습니다.
               </h2>
             </Reveal>
@@ -840,6 +903,20 @@ export function ProjectDetail() {
           </div>
         </section>
       )}
+
+      <section className="px-5 py-20 sm:px-9 sm:py-24">
+        <div className="mx-auto flex max-w-[1320px] flex-col justify-between gap-7 border-t border-sand pt-9 lg:flex-row lg:items-center">
+          <div>
+            <p className="type-eyebrow text-[12px] text-caramel">
+              Back to Projects
+            </p>
+            <h2 className="type-korean-title mt-3 text-3xl leading-tight text-espresso sm:text-4xl">
+              프로젝트 목록으로 돌아가기
+            </h2>
+          </div>
+          <HoldToProjects to={returnTo} />
+        </div>
+      </section>
     </main>
   );
 }

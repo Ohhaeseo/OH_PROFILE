@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 import { fashionIntro, looks, type Look } from "../data/fashion";
 
@@ -16,38 +17,76 @@ function EntryPull() {
   );
 }
 
+function MovingWord({
+  text,
+  reverse = false,
+}: {
+  text: string;
+  reverse?: boolean;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+  const x = useTransform(
+    scrollYProgress,
+    [0, 1],
+    reverse ? ["18vw", "-18vw"] : ["-18vw", "18vw"],
+  );
+
+  return (
+    <div ref={ref} className="pointer-events-none absolute inset-x-0 top-1/2 z-20 -translate-y-1/2 overflow-hidden">
+      <motion.span
+        style={{ x }}
+        className="block whitespace-nowrap font-display text-[26vw] uppercase leading-none text-bone/[0.09] mix-blend-difference"
+      >
+        {text} {text}
+      </motion.span>
+    </div>
+  );
+}
+
 function LookCard({ look, index }: { look: Look; index: number }) {
-  const wide = look.span === "wide";
+  const reverse = index % 2 === 1;
   return (
     <motion.figure
       initial={{ opacity: 0, y: 54, scale: 0.98 }}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, margin: "0px 0px -12% 0px" }}
       transition={{ duration: 0.95, ease: EASE, delay: (index % 3) * 0.05 }}
-      className={`group relative ${wide ? "lg:col-span-12" : "lg:col-span-4"}`}
+      className="group relative grid min-h-[96svh] items-center overflow-hidden border-t border-white/10 py-20 lg:grid-cols-[0.85fr_1fr] lg:gap-16"
     >
-      <div className="relative overflow-hidden bg-[#1b1a18]">
+      <MovingWord text={look.title.replaceAll(" ", "")} reverse={reverse} />
+      <div className={`relative z-10 ${reverse ? "lg:order-2" : ""}`}>
+        <motion.div
+          whileHover={{ y: -10, rotate: reverse ? 0.4 : -0.4 }}
+          transition={{ duration: 0.7, ease: EASE }}
+          className="relative overflow-hidden rounded-[2rem] bg-[#1b1a18] shadow-[0_50px_120px_-70px_rgba(0,0,0,0.9)]"
+        >
         <img
           src={look.image}
           alt={look.title}
           loading="lazy"
-          className={`w-full object-cover grayscale-[0.08] transition-all duration-[1.4s] ease-out group-hover:scale-[1.045] group-hover:grayscale-0 ${
-            wide ? "aspect-[16/8]" : "aspect-[4/5]"
-          }`}
+          className="h-[72svh] w-full object-cover object-center grayscale-[0.08] transition-all duration-[1.4s] ease-out group-hover:scale-[1.045] group-hover:grayscale-0"
         />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/52 via-black/5 to-transparent" />
-        <span className="absolute left-5 top-4 font-display text-5xl text-bone/90 mix-blend-difference">
+        </motion.div>
+        <span className="absolute right-7 top-7 z-10 font-display text-5xl text-bone/90 mix-blend-difference">
           {look.id}
         </span>
-        <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-5 p-5">
-          <span className="font-display text-[clamp(1.8rem,4vw,4rem)] uppercase leading-none text-bone">
+      </div>
+      <figcaption className={`relative z-30 max-w-xl ${reverse ? "lg:order-1" : ""}`}>
+          <span className="font-display text-[clamp(4rem,9vw,9rem)] uppercase leading-[0.84] text-bone">
             {look.title}
           </span>
-          <span className="hidden max-w-[180px] text-right text-[11px] uppercase tracking-[0.22em] text-bone/70 sm:block">
+          <span className="mt-7 block max-w-[360px] text-[12px] uppercase tracking-[0.26em] text-bone/58">
             {look.meta}
           </span>
-        </figcaption>
-      </div>
+          <p className="mt-8 border-l border-bone/20 pl-5 text-[15px] leading-[1.8] text-ash">
+            옷의 실루엣과 색감이 먼저 보이도록 크게 두고, 디테일은 천천히 따라오게 구성했습니다.
+          </p>
+      </figcaption>
     </motion.figure>
   );
 }
@@ -162,7 +201,7 @@ export function Fashion() {
             </span>
           </div>
 
-          <div className="grid gap-5 sm:gap-6 lg:grid-cols-12">
+          <div className="space-y-0">
             {looks.map((look, index) => (
               <LookCard key={look.id} look={look} index={index} />
             ))}

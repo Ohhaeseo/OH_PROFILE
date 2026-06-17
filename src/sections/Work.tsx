@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 import { projects, sideWorks, type Project } from "../data/projects";
 import { Reveal } from "../components/Reveal";
+import { ProjectDetailLink } from "../components/ProjectDetailLink";
 
 type SubProject = {
   num: string;
@@ -121,17 +121,10 @@ function MainProject({ p }: { p: Project }) {
         </Reveal>
 
         <Reveal delay={0.22}>
-          <Link
+          <ProjectDetailLink
             to={`/projects/${p.id}`}
-            state={{ returnTo: `#project-${p.id}` }}
-            onClick={() => window.scrollTo({ top: 0, left: 0, behavior: "auto" })}
-            className="group mt-7 inline-flex items-center gap-2 rounded-full bg-caramel px-5 py-2.5 text-[12px] font-semibold tracking-wide text-cream shadow-[0_18px_40px_-24px_rgba(111,75,43,0.8)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-espresso active:scale-[0.98]"
-          >
-            프로젝트 상세보기
-            <span className="transition-transform duration-300 group-hover:translate-x-1">
-              ↗
-            </span>
-          </Link>
+            returnTo={`#project-${p.id}`}
+          />
         </Reveal>
       </div>
     </div>
