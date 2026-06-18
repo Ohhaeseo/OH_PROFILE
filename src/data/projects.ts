@@ -28,11 +28,11 @@ export const projects: Project[] = [
     award: "Main Project",
     tags: ["FastAPI", "Spring Boot", "React", "LLM · VEO", "Google Veo"],
     summary:
-      "PULSE는 외식업 사장님이 마케팅을 따로 공부하지 않아도 고객을 이해하고, 홍보 영상을 만들고, 다음 행동을 확인할 수 있도록 설계한 AI 마케팅 자동화 플랫폼입니다. 리뷰와 상권 데이터를 기반으로 고객 인사이트를 만들고, 그 결과를 릴스 제작과 인플루언서 매칭 흐름으로 연결했습니다.",
+      "PULSE는 외식업 사장님이 마케팅을 따로 공부하지 않아도 고객을 이해하고, 홍보 영상을 만들고, 다음 행동을 확인할 수 있도록 설계한 AI 마케팅 자동화 플랫폼입니다. React, Spring Boot, FastAPI를 나누어 리뷰 수집과 분석, 페르소나 생성, 숏폼 광고 제작, 대시보드 액션 제안으로 이어지는 흐름을 구성했습니다.",
     highlights: [
-      "리뷰가 충분할 때는 Review Insight, 부족할 때는 Local Insight로 보완하는 Dual Insight Model을 설계했습니다.",
-      "사진 업로드 이후 Hook, Showcase, Highlight, CTA 구조로 숏폼 광고 스토리보드를 생성하는 흐름을 정리했습니다.",
-      "핵심 마케팅 루프와 Pro 인플루언서 매칭 기능을 분리해 서비스의 사용성과 수익 구조를 함께 고려했습니다.",
+      "FastAPI AI 서버에서 task_id 기반 비동기 분석, 진행률 polling, MongoDB 리뷰 스냅샷 저장 구조를 확인했습니다.",
+      "Kiwi와 BERTopic으로 리뷰 토픽을 추출하고, LLM으로 페르소나와 고객 여정 리포트를 생성하는 흐름을 정리했습니다.",
+      "홍보 영상 생성은 프롬프트 추천, 미리보기, 생성 요청, 상태 조회 API로 나누어 사용자가 기다리는 과정을 볼 수 있게 설계했습니다.",
     ],
     cover: `${A}/pulse-landing.png`,
     gallery: [

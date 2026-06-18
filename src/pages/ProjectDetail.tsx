@@ -425,6 +425,92 @@ function defaultReturnTarget(projectId: string) {
   return projectId === "pulse" ? "#projects" : `#project-${projectId}`;
 }
 
+const pulseArchitecture = [
+  {
+    label: "React Frontend",
+    title: "사용자가 보는 실행 화면",
+    body: "인사이트, 대시보드, 릴스 제작, 리뷰 관리, 인플루언서 매칭 화면을 담당합니다.",
+    stack: "Vite · Tailwind · Framer Motion · Recharts",
+  },
+  {
+    label: "Spring Boot",
+    title: "인증과 가게 정보의 관문",
+    body: "회원가입, 로그인, 가게 저장, AI 서버 호출을 중계하는 메인 백엔드 역할로 설계했습니다.",
+    stack: "Security · JPA · JWT · REST API",
+  },
+  {
+    label: "FastAPI AI Server",
+    title: "무거운 분석과 생성 작업",
+    body: "리뷰 수집, 토픽 분석, LLM 리포트, 홍보 영상 생성 task를 백그라운드에서 처리합니다.",
+    stack: "Playwright · Kiwi · BERTopic · MongoDB · Veo",
+  },
+];
+
+const pulsePipelines = [
+  {
+    title: "Review Analysis",
+    steps: [
+      "POST /analysis/request",
+      "task_id 발급",
+      "리뷰 수집",
+      "MongoDB 스냅샷",
+      "Kiwi · BERTopic",
+      "LLM 리포트",
+      "GET /analysis/result",
+    ],
+  },
+  {
+    title: "Smart Reels",
+    steps: [
+      "페르소나 선택",
+      "프롬프트 추천",
+      "미리보기",
+      "POST /info/generate",
+      "Veo 생성",
+      "상태 polling",
+      "MP4 URL 반환",
+    ],
+  },
+];
+
+const pulseApiGroups = [
+  {
+    title: "분석 API",
+    items: ["/analysis/request", "/analysis/status/{task_id}", "/analysis/result/{task_id}", "/analysis/latest"],
+  },
+  {
+    title: "운영 액션 API",
+    items: ["/reviews/latest", "/reviews/replies/generate", "/chat", "/map-insight/actions"],
+  },
+  {
+    title: "홍보 영상 API",
+    items: ["/info/prompt-recommendation", "/info/prompt-preview", "/info/generate", "/info/status/{task_id}"],
+  },
+];
+
+const pulseImprovements = [
+  {
+    label: "Real Data",
+    title: "대시보드 V2 실데이터 연결",
+    body: "현재 V2 대시보드는 완성도 높은 화면과 응답 스키마가 먼저 잡혀 있고 일부는 mock 데이터로 동작합니다. 다음 단계에서는 분석 결과, 릴스 성과, 검색 트렌드를 하나의 storeId 기준으로 묶어 실제 운영 지표로 전환합니다.",
+  },
+  {
+    label: "Auth",
+    title: "개발 모드 인증 흐름 정리",
+    body: "프론트 보호 라우팅은 개발 편의를 위해 우회 가능한 상태가 남아 있습니다. 배포 단계에서는 JWT 저장, 만료 처리, 권한별 접근 제어를 실제 사용자 흐름에 맞게 고정해야 합니다.",
+  },
+  {
+    label: "Video",
+    title: "Veo 생성 안정성 보완",
+    body: "영상 생성 서버는 Vertex/Gemini 백엔드와 9:16 출력, 해상도 프로필, fallback 모델을 고려하고 있습니다. 이후에는 생성 실패 원인, 재시도, 비용 제한, 결과 저장 정책을 더 촘촘히 가져가면 좋습니다.",
+  },
+  {
+    label: "Bridge",
+    title: "Spring-FastAPI 계약 명세 고정",
+    body: "FastAPI 쪽 API는 task 기반으로 명확하지만, Spring 소스는 현재 체크아웃에서 제한적으로 확인됩니다. API contract를 OpenAPI 또는 shared schema로 고정하면 FE/BE/AI 서버 간 변경 비용을 줄일 수 있습니다.",
+  },
+];
+
 function HoldToProjects({ to }: { to: string }) {
   const navigate = useNavigate();
   const timerRef = useRef<number | null>(null);
@@ -859,6 +945,134 @@ export function ProjectDetail() {
                 </div>
               </Reveal>
             </div>
+
+            <Reveal className="mt-16">
+              <p className="text-[12px] font-semibold uppercase tracking-[0.3em] text-caramel">
+                Code Based Architecture
+              </p>
+              <div className="mt-6 grid gap-px overflow-hidden rounded-[1.6rem] border border-cream/15 bg-cream/15 lg:grid-cols-3">
+                {pulseArchitecture.map((item, index) => (
+                  <motion.article
+                    key={item.label}
+                    whileHover={{ y: -6 }}
+                    transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                    className="bg-espresso/80 p-6"
+                  >
+                    <div className="flex items-center justify-between gap-4">
+                      <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-caramel">
+                        {item.label}
+                      </span>
+                      <span className="font-display text-4xl text-cream/18">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                    </div>
+                    <h3 className="mt-8 text-2xl font-semibold leading-tight text-cream">
+                      {item.title}
+                    </h3>
+                    <p className="mt-4 text-[14.5px] leading-[1.8] text-cream/66">
+                      {item.body}
+                    </p>
+                    <p className="mt-7 rounded-full border border-cream/12 bg-cream/[0.06] px-4 py-2 text-[11px] font-medium tracking-wide text-cream/58">
+                      {item.stack}
+                    </p>
+                  </motion.article>
+                ))}
+              </div>
+            </Reveal>
+
+            <div className="mt-12 grid gap-6 lg:grid-cols-2">
+              {pulsePipelines.map((pipeline, pipelineIndex) => (
+                <Reveal
+                  key={pipeline.title}
+                  delay={pipelineIndex * 0.06}
+                  className="rounded-[1.5rem] border border-cream/15 bg-cream/[0.06] p-6"
+                >
+                  <div className="flex items-center justify-between gap-4">
+                    <h3 className="text-2xl font-semibold text-cream">
+                      {pipeline.title}
+                    </h3>
+                    <span className="rounded-full bg-caramel px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-espresso">
+                      pipeline
+                    </span>
+                  </div>
+                  <div className="mt-7 space-y-3">
+                    {pipeline.steps.map((step, index) => (
+                      <div key={step} className="grid grid-cols-[42px_1fr] items-center gap-3">
+                        <span className="flex h-8 w-8 items-center justify-center rounded-full border border-cream/16 bg-cream/[0.05] text-[11px] font-semibold text-caramel">
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                        <div className="relative isolate overflow-hidden rounded-full border border-cream/10 bg-cream/[0.04] px-4 py-2.5 text-[13px] font-medium text-cream/72">
+                          {step}
+                          <span
+                            className="absolute inset-y-0 left-0 -z-10 rounded-full opacity-30"
+                            style={{
+                              width: `${22 + index * 11}%`,
+                              background: pipelineIndex === 0 ? "#ff5a36" : "#d0a06b",
+                            }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+
+            <Reveal className="mt-12 rounded-[1.6rem] border border-cream/15 bg-cream/[0.06] p-6 sm:p-8">
+              <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
+                <div>
+                  <p className="text-[12px] font-semibold uppercase tracking-[0.3em] text-caramel">
+                    API Surface
+                  </p>
+                  <h3 className="mt-4 text-3xl font-semibold leading-tight text-cream">
+                    기능을 API 단위로 나누어 기다림과 실패를 다룰 수 있게 했습니다.
+                  </h3>
+                </div>
+                <div className="grid gap-4 md:grid-cols-3">
+                  {pulseApiGroups.map((group) => (
+                    <div key={group.title} className="rounded-[1.15rem] border border-cream/12 bg-espresso/70 p-5">
+                      <h4 className="text-[15px] font-semibold text-cream">
+                        {group.title}
+                      </h4>
+                      <div className="mt-4 space-y-2">
+                        {group.items.map((item) => (
+                          <p
+                            key={item}
+                            className="rounded-lg bg-cream/[0.05] px-3 py-2 font-mono text-[11px] text-cream/62"
+                          >
+                            {item}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Reveal>
+
+            <Reveal className="mt-12">
+              <p className="text-[12px] font-semibold uppercase tracking-[0.3em] text-caramel">
+                Next Refinement
+              </p>
+              <h3 className="mt-4 max-w-3xl text-3xl font-semibold leading-tight text-cream">
+                실제 프로젝트를 보며 보완이 필요하다고 판단한 부분입니다.
+              </h3>
+              <div className="mt-7 grid gap-px overflow-hidden rounded-[1.5rem] border border-cream/15 bg-cream/15 md:grid-cols-2">
+                {pulseImprovements.map((item) => (
+                  <article key={item.title} className="bg-espresso/80 p-6">
+                    <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-caramel">
+                      {item.label}
+                    </span>
+                    <h4 className="mt-5 text-xl font-semibold text-cream">
+                      {item.title}
+                    </h4>
+                    <p className="mt-4 text-[14px] leading-[1.8] text-cream/64">
+                      {item.body}
+                    </p>
+                  </article>
+                ))}
+              </div>
+            </Reveal>
 
             <div className="mt-20 space-y-8">
               {contributions.map((item, index) => (
