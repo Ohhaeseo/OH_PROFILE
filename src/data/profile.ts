@@ -20,7 +20,6 @@ export const profile = {
   github: "https://github.com/Ohhaeseo",
   githubLabel: "Ohhaeseo",
   phone: "010-2676-0547",
-  mbti: "INFJ",
 };
 
 export const about = {

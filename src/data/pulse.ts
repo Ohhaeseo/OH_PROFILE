@@ -14,6 +14,7 @@ export const pulse = {
     "홍보 영상 생성은 단순한 업로드 버튼이 아니라 분석 맥락을 이어받는 흐름입니다. 페르소나, 매장 요약, 액션 제안, 업로드 이미지를 바탕으로 프롬프트를 추천하고, Hook, Showcase, Highlight, CTA 구조의 9:16 숏폼 광고로 변환하는 방향을 잡았습니다.",
   ],
   loop: ["Review Insight", "Persona", "Smart Reels", "Action Dashboard", "Pro Matching"],
+  keywords: ["AI Marketing", "Review Pipeline", "Smart Reels", "Action Loop"],
   stack: ["React", "Spring Boot", "FastAPI", "MongoDB", "Kiwi", "BERTopic", "LLM", "Veo"],
   links: [{ label: "GitHub", href: "https://github.com/Ohhaeseo" }],
 };

@@ -13,9 +13,59 @@ type SubProject = {
   cover: string;
 };
 
+type ProjectTone = {
+  bg: string;
+  panel: string;
+  accent: string;
+  muted: string;
+  word: string;
+};
+
+const projectTones: Record<string, ProjectTone> = {
+  "vr-live": {
+    bg: "#efeafd",
+    panel: "#fbf9ff",
+    accent: "#7c5cff",
+    muted: "#8b7ab7",
+    word: "IMMERSIVE",
+  },
+  nullnull: {
+    bg: "#edf3ff",
+    panel: "#f8fbff",
+    accent: "#4d5eff",
+    muted: "#7081c8",
+    word: "NOWCAST",
+  },
+  "dspy-ad": {
+    bg: "#f4eadb",
+    panel: "#fffaf2",
+    accent: "#9f6a3d",
+    muted: "#a87955",
+    word: "PROMPT",
+  },
+};
+
+const subProjectTones: ProjectTone[] = [
+  { bg: "#f3eee7", panel: "#fffaf3", accent: "#a6724b", muted: "#a78a72", word: "TRIP" },
+  { bg: "#edf0e6", panel: "#fbfcf6", accent: "#7b8a36", muted: "#8c9468", word: "UNITY" },
+  { bg: "#eef3f5", panel: "#fbfdfe", accent: "#4f7688", muted: "#78919b", word: "WEB" },
+  { bg: "#f5ecef", panel: "#fff8fa", accent: "#a76275", muted: "#a47b86", word: "MEDIA" },
+];
+
 function Tag({ children }: { children: string }) {
   return (
     <span className="rounded-full border border-mocha/40 px-3 py-1 text-[11px] tracking-wide text-coffee">
+      {children}
+    </span>
+  );
+}
+
+function Keyword({ children, accent }: { children: string; accent: string }) {
+  return (
+    <span
+      className="rounded-full px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-cream shadow-[0_14px_28px_-22px_rgba(43,33,26,0.8)]"
+      style={{ backgroundColor: accent }}
+    >
       {children}
     </span>
   );
@@ -30,17 +80,28 @@ function imageClassName(num: string) {
 }
 
 function MainProject({ p }: { p: Project }) {
+  const tone = projectTones[p.id] ?? projectTones["dspy-ad"];
+  const keywords = p.keywords ?? p.tags.slice(0, 4);
+
   return (
-    <div
+    <article
       id={`project-${p.id}`}
-      className="grid min-h-[78vh] scroll-mt-24 items-center gap-10 border-t border-sand py-20 lg:grid-cols-2 lg:gap-16"
+      className="relative grid min-h-[78vh] scroll-mt-24 items-center gap-10 overflow-hidden rounded-[2rem] border border-sand px-5 py-14 shadow-[0_38px_90px_-64px_rgba(74,58,44,0.7)] sm:px-8 sm:py-16 lg:grid-cols-2 lg:gap-16 lg:px-12"
+      style={{ backgroundColor: tone.bg }}
     >
+      <span
+        aria-hidden
+        className="pointer-events-none absolute -right-8 top-8 hidden select-none font-display text-[15vw] leading-none text-espresso/[0.055] lg:block"
+      >
+        {tone.word}
+      </span>
       <Reveal>
         <motion.div
           whileHover={{ y: -10, rotate: -0.35 }}
           whileTap={{ scale: 0.985 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="group interactive-card relative overflow-hidden rounded-[1.75rem] border border-sand bg-sand/60 p-3 shadow-[0_40px_90px_-40px_rgba(74,58,44,0.55)]"
+          className="group interactive-card relative overflow-hidden rounded-[1.75rem] border border-white/60 p-3 shadow-[0_40px_90px_-44px_rgba(74,58,44,0.58)]"
+          style={{ backgroundColor: tone.panel }}
         >
           <span className="accent-spark absolute right-5 top-5 z-10">✦</span>
           <div className="overflow-hidden rounded-2xl bg-cream">
@@ -71,10 +132,12 @@ function MainProject({ p }: { p: Project }) {
         </motion.div>
       </Reveal>
 
-      <div>
+      <div className="relative z-10">
         <Reveal>
           <div className="flex items-baseline gap-4">
-            <span className="font-serif text-5xl text-mocha/60">{p.num}</span>
+            <span className="font-display text-6xl leading-none" style={{ color: tone.muted }}>
+              {p.num}
+            </span>
             {p.award && (
               <span className="rounded-full bg-caramel/12 px-3 py-1 text-[11px] font-medium tracking-wide text-caramel ring-1 ring-caramel/30">
                 {p.award}
@@ -87,6 +150,16 @@ function MainProject({ p }: { p: Project }) {
           <p className="mt-2 text-[15px] text-coffee">{p.subtitle}</p>
         </Reveal>
 
+        <Reveal delay={0.04}>
+          <div className="mt-5 flex flex-wrap gap-2">
+            {keywords.map((keyword) => (
+              <Keyword key={keyword} accent={tone.accent}>
+                {keyword}
+              </Keyword>
+            ))}
+          </div>
+        </Reveal>
+
         <Reveal delay={0.05}>
           <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-1 text-[12px] text-mocha">
             <span>{p.year}</span>
@@ -96,7 +169,7 @@ function MainProject({ p }: { p: Project }) {
         </Reveal>
 
         <Reveal delay={0.1}>
-          <p className="mt-6 max-w-xl text-[14.5px] leading-relaxed text-coffee">
+          <p className="mt-6 max-w-xl text-[14.5px] leading-[1.85] text-coffee">
             {p.summary}
           </p>
         </Reveal>
@@ -114,7 +187,7 @@ function MainProject({ p }: { p: Project }) {
 
         <Reveal delay={0.18}>
           <div className="mt-7 flex flex-wrap gap-2">
-            {p.tags.map((t) => (
+            {p.tags.slice(0, 5).map((t) => (
               <Tag key={t}>{t}</Tag>
             ))}
           </div>
@@ -127,7 +200,7 @@ function MainProject({ p }: { p: Project }) {
           />
         </Reveal>
       </div>
-    </div>
+    </article>
   );
 }
 
@@ -139,17 +212,29 @@ function SubProjectSection({
   index: number;
 }) {
   const flip = index % 2 === 1;
+  const tone = subProjectTones[index % subProjectTones.length];
+  const keywords = project.tags.slice(0, 3);
 
   return (
     <Reveal>
-      <section className="grid min-h-[72vh] items-center gap-10 border-t border-sand py-20 sm:py-24 lg:grid-cols-2 lg:gap-16">
+      <section
+        className="relative grid min-h-[72vh] items-center gap-10 overflow-hidden rounded-[2rem] border border-sand px-5 py-14 shadow-[0_34px_80px_-66px_rgba(74,58,44,0.62)] sm:px-8 sm:py-16 lg:grid-cols-2 lg:gap-16 lg:px-12"
+        style={{ backgroundColor: tone.bg }}
+      >
+        <span
+          aria-hidden
+          className="pointer-events-none absolute -right-6 top-10 hidden select-none font-display text-[13vw] leading-none text-espresso/[0.045] lg:block"
+        >
+          {tone.word}
+        </span>
         <motion.div
           whileHover={{ y: -8, rotate: flip ? 0.35 : -0.35 }}
           whileTap={{ scale: 0.985 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className={`group interactive-card relative overflow-hidden rounded-[1.75rem] border border-sand bg-sand/45 p-3 shadow-[0_36px_80px_-44px_rgba(74,58,44,0.55)] ${
+          className={`group interactive-card relative overflow-hidden rounded-[1.75rem] border border-white/60 p-3 shadow-[0_36px_80px_-44px_rgba(74,58,44,0.55)] ${
             flip ? "lg:order-2" : ""
           }`}
+          style={{ backgroundColor: tone.panel }}
         >
           <span className="accent-spark absolute right-5 top-5 z-10">⌁</span>
           <div className="overflow-hidden rounded-2xl bg-cream">
@@ -162,8 +247,8 @@ function SubProjectSection({
           </div>
         </motion.div>
 
-        <div className={flip ? "lg:order-1" : ""}>
-          <span className="font-serif text-5xl text-mocha/55">
+        <div className={`relative z-10 ${flip ? "lg:order-1" : ""}`}>
+          <span className="font-display text-6xl leading-none" style={{ color: tone.muted }}>
             {project.num}
           </span>
           <p className="mt-5 text-[12px] font-semibold uppercase tracking-[0.28em] text-caramel">
@@ -173,6 +258,13 @@ function SubProjectSection({
             {project.title}
           </h3>
           <p className="mt-3 text-[15px] text-coffee">{project.subtitle}</p>
+          <div className="mt-5 flex flex-wrap gap-2">
+            {keywords.map((keyword) => (
+              <Keyword key={keyword} accent={tone.accent}>
+                {keyword}
+              </Keyword>
+            ))}
+          </div>
           <p className="mt-3 text-[12px] text-mocha">{project.meta}</p>
           <p className="mt-7 max-w-2xl text-[15px] leading-[1.85] text-coffee">
             {project.desc}
@@ -224,7 +316,7 @@ export function Work() {
           Main Project 02-04
         </Reveal>
 
-        <div className="space-y-4">
+        <div className="space-y-8">
           {mainProjects.map((p) => (
             <MainProject key={p.id} p={p} />
           ))}
@@ -235,7 +327,7 @@ export function Work() {
           그 외 프로젝트
         </Reveal>
 
-        <div className="mt-8">
+        <div className="mt-8 space-y-8">
           {subProjects.map((project, index) => (
             <SubProjectSection
               key={project.title}

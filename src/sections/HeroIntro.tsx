@@ -14,7 +14,6 @@ const PORTRAIT = `${import.meta.env.BASE_URL}assets/profile-duotone.png`;
 
 const personalInfo = [
   { label: "Born", value: profile.birthDate },
-  { label: "MBTI", value: profile.mbti },
   { label: "Email", value: profile.email, href: `mailto:${profile.email}` },
   { label: "GitHub", value: profile.githubLabel, href: profile.github },
   { label: "Phone", value: profile.phone, href: `tel:${profile.phone}` },

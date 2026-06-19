@@ -7,6 +7,7 @@ export type Project = {
   role: string;
   award?: string;
   tags: string[];
+  keywords?: string[];
   summary: string;
   highlights: string[];
   cover: string;
@@ -27,6 +28,7 @@ export const projects: Project[] = [
     role: "My Part · 영상 생성 로직 · 인플루언서 매칭 · 인증/가입 흐름",
     award: "Main Project",
     tags: ["FastAPI", "Spring Boot", "React", "LLM · VEO", "Google Veo"],
+    keywords: ["AI Marketing", "Review Pipeline", "Smart Reels", "Action Loop"],
     summary:
       "PULSE는 외식업 사장님이 마케팅을 따로 공부하지 않아도 고객을 이해하고, 홍보 영상을 만들고, 다음 행동을 확인할 수 있도록 설계한 AI 마케팅 자동화 플랫폼입니다. React, Spring Boot, FastAPI를 나누어 리뷰 수집과 분석, 페르소나 생성, 숏폼 광고 제작, 대시보드 액션 제안으로 이어지는 흐름을 구성했습니다.",
     highlights: [
@@ -54,6 +56,7 @@ export const projects: Project[] = [
     role: "기획 · Unity 개발 · 발표/면접 플로우 구현",
     award: "가상융합서비스 경진대회 준우승",
     tags: ["Unity 3D", "C#", "XR Interaction", "Firebase", "STT/TTS"],
+    keywords: ["VR Practice", "Speech Feedback", "Interview Loop", "Firebase"],
     summary:
       "VR Performance는 발표, 면접, 공연처럼 긴장감이 큰 상황을 VR 공간에서 미리 경험하도록 만든 Unity 기반 플랫폼입니다. PDF 발표자료 업로드, 발표 녹음, AI 피드백, 면접 질문 루프, Firebase 기록 저장까지 실제 연습 흐름을 중심으로 구성했습니다.",
     highlights: [
@@ -74,6 +77,7 @@ export const projects: Project[] = [
     role: "기획 · UI 설계 · 프로토타입",
     award: "Main Project",
     tags: ["Expo Router", "React Native Web", "TypeScript", "Nowcasting"],
+    keywords: ["Nowcasting", "Travel Risk", "Crowd Map", "Prototype"],
     summary:
       "NULL NULL AI는 서울을 찾은 외국인 여행자가 혼잡, 날씨, 이동 변수 때문에 시간을 낭비하지 않도록 돕는 모바일 앱 콘셉트입니다. 서울시 실시간 도시 데이터의 지연을 지하철 승하차와 날씨 정보로 보완하고, 지금 가도 괜찮은 장소와 대안을 추천하는 구조를 기획했습니다. 프로젝트 범위는 기획, 디자인, 발표 가능한 프로토타입까지입니다.",
     highlights: [
@@ -98,6 +102,7 @@ export const projects: Project[] = [
     role: "연구 · 프롬프트 설계 · 실험 · 평가",
     award: "Main Project",
     tags: ["DSPy", "Vertex AI · VEO", "CLIP", "Gemini VQA", "AIDA"],
+    keywords: ["DSPy", "AIDA Structure", "VQA Evaluation", "Ad Prompt"],
     summary:
       "AD Video Generation은 음식점 광고 영상을 만들 때 단순한 메뉴 설명이 아니라 광고다운 장면 흐름이 반영되도록 프롬프트 구조를 연구한 프로젝트입니다. 외식업 광고를 Hook, Showcase, Highlight, CTA 장면으로 나누고, DSPy 기반 프롬프트 생성 절차와 CLIP/VQA 평가를 통해 결과를 검증했습니다.",
     highlights: [
@@ -116,6 +121,7 @@ export const projects: Project[] = [
     year: "2025",
     role: "기획 · 프로토타입",
     tags: ["React Native", "Python", "Flask"],
+    keywords: ["Digital Twin", "O2O Guide", "Travel UX"],
     summary:
       "TripCode는 여행 전 실제 장소의 분위기와 동선을 미리 확인할 수 있도록 기획한 디지털 트윈 기반 여행 가이드입니다. 사용자가 관광지의 실제 구조를 먼저 탐색하고, 현장 방문 전 필요한 정보를 빠르게 파악하도록 화면 흐름을 구성했습니다.",
     highlights: [

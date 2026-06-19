@@ -3,6 +3,19 @@ import { pulse, contributions, type Contribution } from "../data/pulse";
 import { Reveal } from "../components/Reveal";
 import { ProjectDetailLink } from "../components/ProjectDetailLink";
 
+const pulseTone = {
+  bg: "#f1f5fc",
+  panel: "#fbfdff",
+};
+
+function PulseKeyword({ children }: { children: string }) {
+  return (
+    <span className="rounded-full bg-[#002b7a] px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-white shadow-[0_14px_28px_-22px_rgba(0,43,122,0.8)]">
+      {children}
+    </span>
+  );
+}
+
 function ContributionBlock({ c, flip }: { c: Contribution; flip: boolean }) {
   return (
     <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
@@ -89,53 +102,69 @@ export function PulseFeature() {
           Main Project 01
         </Reveal>
 
-        <div className="mt-8 grid items-end gap-6 lg:grid-cols-12">
-          <Reveal className="lg:col-span-7">
-            <h2 className="font-serif text-[19vw] leading-[0.86] tracking-tight text-espresso sm:text-[clamp(5rem,13vw,12rem)]">
-              {pulse.title}
-            </h2>
-          </Reveal>
-          <div className="lg:col-span-5 lg:pb-3">
-            <p className="text-[15px] text-coffee sm:text-base">
-              {pulse.subtitle}
-            </p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              {pulse.stack.map((t) => (
-                <span
-                  key={t}
-                  className="rounded-full border border-mocha/40 px-3 py-1 text-[11px] tracking-wide text-coffee"
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
-            <ProjectDetailLink
-              to="/projects/pulse"
-              returnTo="#projects"
-              className="group mt-6 inline-flex items-center gap-2 rounded-full bg-espresso px-5 py-2.5 text-[12px] font-semibold tracking-wide text-cream shadow-[0_18px_40px_-24px_rgba(39,31,25,0.8)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-caramel active:scale-[0.98]"
-            />
-          </div>
-        </div>
-
-        {/* 대형 커버 */}
-        <Reveal className="mt-12">
-          <motion.div
-            whileHover={{ y: -10, rotate: 0.25 }}
-            whileTap={{ scale: 0.99 }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            className="interactive-card relative overflow-hidden rounded-[2rem] border border-sand bg-sand/40 p-3 shadow-[0_50px_110px_-50px_rgba(74,58,44,0.55)]"
+        <div
+          className="relative mt-8 overflow-hidden rounded-[2rem] border border-sand px-5 py-10 shadow-[0_40px_100px_-70px_rgba(74,58,44,0.7)] sm:px-8 sm:py-14 lg:px-12"
+          style={{ backgroundColor: pulseTone.bg }}
+        >
+          <span
+            aria-hidden
+            className="pointer-events-none absolute -right-10 top-10 hidden select-none font-display text-[15vw] leading-none text-espresso/[0.05] lg:block"
           >
-            <span className="accent-spark absolute right-6 top-6 z-10">✦</span>
-            <img
-              src={pulse.cover}
-              alt="PULSE 랜딩"
-              className="warm-screenshot aspect-[16/9] w-full rounded-[1.4rem] object-cover object-top"
-            />
-          </motion.div>
-        </Reveal>
+            PULSE
+          </span>
+          <div className="relative z-10 grid items-end gap-6 lg:grid-cols-12">
+            <Reveal className="lg:col-span-7">
+              <h2 className="font-serif text-[19vw] leading-[0.86] tracking-tight text-espresso sm:text-[clamp(5rem,13vw,12rem)]">
+                {pulse.title}
+              </h2>
+            </Reveal>
+            <div className="lg:col-span-5 lg:pb-3">
+              <p className="text-[15px] text-coffee sm:text-base">
+                {pulse.subtitle}
+              </p>
+              <div className="mt-5 flex flex-wrap gap-2">
+                {pulse.keywords.map((keyword) => (
+                  <PulseKeyword key={keyword}>{keyword}</PulseKeyword>
+                ))}
+              </div>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {pulse.stack.slice(0, 6).map((t) => (
+                  <span
+                    key={t}
+                    className="rounded-full border border-mocha/40 bg-white/35 px-3 py-1 text-[11px] tracking-wide text-coffee"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+              <ProjectDetailLink
+                to="/projects/pulse"
+                returnTo="#projects"
+                className="group mt-6 inline-flex items-center gap-2 rounded-full bg-espresso px-5 py-2.5 text-[12px] font-semibold tracking-wide text-cream shadow-[0_18px_40px_-24px_rgba(39,31,25,0.8)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-caramel active:scale-[0.98]"
+              />
+            </div>
+          </div>
+
+          {/* 대형 커버 */}
+          <Reveal className="relative z-10 mt-12">
+            <motion.div
+              whileHover={{ y: -10, rotate: 0.25 }}
+              whileTap={{ scale: 0.99 }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              className="interactive-card relative overflow-hidden rounded-[2rem] border border-white/70 p-3 shadow-[0_50px_110px_-54px_rgba(74,58,44,0.58)]"
+              style={{ backgroundColor: pulseTone.panel }}
+            >
+              <span className="accent-spark absolute right-6 top-6 z-10">✦</span>
+              <img
+                src={pulse.cover}
+                alt="PULSE 랜딩"
+                className="warm-screenshot aspect-[16/9] w-full rounded-[1.4rem] object-cover object-top"
+              />
+            </motion.div>
+          </Reveal>
 
         {/* 개요 + 루프 */}
-        <div className="mt-16 grid gap-10 lg:grid-cols-12">
+        <div className="relative z-10 mt-16 grid gap-10 lg:grid-cols-12">
           <Reveal className="lg:col-span-5">
             <p className="font-serif-ko text-2xl leading-snug text-espresso sm:text-[1.7rem]">
               {pulse.tagline}
@@ -167,6 +196,7 @@ export function PulseFeature() {
               </div>
             </Reveal>
           </div>
+        </div>
         </div>
 
         {/* My Part */}

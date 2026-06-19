@@ -33,7 +33,6 @@ export function About() {
                 <span className="font-serif text-xl text-espresso">
                   {profile.name} · {profile.nameEn}
                 </span>
-                <span className="text-[12px] text-mocha">{profile.mbti}</span>
               </div>
               <p className="px-1 text-[12.5px] text-mocha">{profile.school}</p>
             </motion.div>
