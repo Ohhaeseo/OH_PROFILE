@@ -13,9 +13,12 @@ export function Capabilities() {
             </Reveal>
             <Reveal>
               <h2 className="font-serif text-4xl leading-tight tracking-tight text-espresso sm:text-5xl">
-                Full-Stack
+                기술 이름보다 먼저,
                 <br />
-                &amp; AI Toolkit
+                내가 연결하는 흐름
+                <span className="mt-4 block font-display text-3xl uppercase tracking-normal text-caramel sm:text-4xl">
+                  Full-Stack &amp; AI Toolkit
+                </span>
               </h2>
             </Reveal>
             <Reveal delay={0.1}>

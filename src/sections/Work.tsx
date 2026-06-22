@@ -22,6 +22,13 @@ type ProjectTone = {
 };
 
 const projectTones: Record<string, ProjectTone> = {
+  pulse: {
+    bg: "#f1f5fc",
+    panel: "#fbfdff",
+    accent: "#002b7a",
+    muted: "#7689bd",
+    word: "PULSE",
+  },
   "vr-live": {
     bg: "#efeafd",
     panel: "#fbf9ff",
@@ -52,6 +59,37 @@ const subProjectTones: ProjectTone[] = [
   { bg: "#f5ecef", panel: "#fff8fa", accent: "#a76275", muted: "#a47b86", word: "MEDIA" },
 ];
 
+const projectLenses: Record<
+  string,
+  { problem: string; build: string; signal: string }
+> = {
+  pulse: {
+    problem: "리뷰와 홍보가 분리된 외식업 운영",
+    build: "분석 서버, 액션 대시보드, 영상 생성 흐름",
+    signal: "사장님이 바로 다음 행동을 볼 수 있는 구조",
+  },
+  "vr-live": {
+    problem: "발표와 면접의 긴장감을 실제처럼 연습하기 어려움",
+    build: "VR 씬, 음성 기록, 질문 루프, Firebase 저장",
+    signal: "연습 이후 피드백까지 남는 실감형 플로우",
+  },
+  nullnull: {
+    problem: "서울 여행 중 혼잡과 날씨로 생기는 헛걸음",
+    build: "실시간 도시 데이터 보정과 대안 장소 추천",
+    signal: "지금 가도 괜찮은지를 빠르게 판단하는 앱 흐름",
+  },
+  "dspy-ad": {
+    problem: "생성형 영상이 광고 구조 없이 장면만 만드는 문제",
+    build: "AIDA 장면 분해, DSPy 프롬프트, CLIP/VQA 평가",
+    signal: "광고다운 흐름을 평가 가능한 기준으로 정리",
+  },
+  tripcode: {
+    problem: "여행 전 장소의 실제 분위기를 파악하기 어려움",
+    build: "디지털 트윈 탐색과 현장 정보 연결",
+    signal: "방문 전 동선과 기대감을 먼저 확인하는 경험",
+  },
+};
+
 function Tag({ children }: { children: string }) {
   return (
     <span className="rounded-full border border-mocha/40 px-3 py-1 text-[11px] tracking-wide text-coffee">
@@ -71,6 +109,41 @@ function Keyword({ children, accent }: { children: string; accent: string }) {
   );
 }
 
+function LensRail({
+  lens,
+  accent,
+}: {
+  lens: { problem: string; build: string; signal: string };
+  accent: string;
+}) {
+  const items = [
+    ["Problem", lens.problem],
+    ["Build", lens.build],
+    ["Signal", lens.signal],
+  ];
+
+  return (
+    <div className="mt-7 grid overflow-hidden rounded-2xl border border-white/70 bg-white/30 sm:grid-cols-3">
+      {items.map(([label, value]) => (
+        <div
+          key={label}
+          className="border-sand/70 p-4 sm:border-l first:sm:border-l-0"
+        >
+          <span
+            className="text-[10px] font-semibold uppercase tracking-[0.18em]"
+            style={{ color: accent }}
+          >
+            {label}
+          </span>
+          <p className="mt-2 text-[12.5px] leading-relaxed text-coffee">
+            {value}
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function imageClassName(num: string) {
   const preserveFullImage = ["04", "05", "08"].includes(num);
 
@@ -82,6 +155,7 @@ function imageClassName(num: string) {
 function MainProject({ p }: { p: Project }) {
   const tone = projectTones[p.id] ?? projectTones["dspy-ad"];
   const keywords = p.keywords ?? p.tags.slice(0, 4);
+  const lens = projectLenses[p.id];
 
   return (
     <article
@@ -173,6 +247,12 @@ function MainProject({ p }: { p: Project }) {
             {p.summary}
           </p>
         </Reveal>
+
+        {lens && (
+          <Reveal delay={0.12}>
+            <LensRail lens={lens} accent={tone.accent} />
+          </Reveal>
+        )}
 
         <Reveal delay={0.14}>
           <ul className="mt-6 space-y-2.5">
@@ -269,6 +349,28 @@ function SubProjectSection({
           <p className="mt-7 max-w-2xl text-[15px] leading-[1.85] text-coffee">
             {project.desc}
           </p>
+          <div className="mt-7 grid gap-3 sm:grid-cols-3">
+            {[
+              ["문제", "왜 필요한 작업인지 먼저 정리했습니다."],
+              ["흐름", "화면과 데이터가 이어지는 순서를 기준으로 구성했습니다."],
+              ["학습", "작게 만들어 보며 다음 프로젝트에 남길 기준을 찾았습니다."],
+            ].map(([label, value]) => (
+              <div
+                key={label}
+                className="rounded-2xl border border-white/70 bg-white/30 p-4"
+              >
+                <span
+                  className="text-[10px] font-semibold uppercase tracking-[0.18em]"
+                  style={{ color: tone.accent }}
+                >
+                  {label}
+                </span>
+                <p className="mt-2 text-[12.5px] leading-relaxed text-coffee">
+                  {value}
+                </p>
+              </div>
+            ))}
+          </div>
           <div className="mt-7 flex flex-wrap gap-2">
             {project.tags.map((tag) => (
               <Tag key={tag}>{tag}</Tag>
@@ -276,6 +378,88 @@ function SubProjectSection({
           </div>
         </div>
       </section>
+    </Reveal>
+  );
+}
+
+function ProjectCompass() {
+  const featured = projects
+    .filter((p) => p.featured)
+    .sort((a, b) => Number(a.num) - Number(b.num));
+
+  return (
+    <Reveal>
+      <div className="mb-12 overflow-hidden rounded-[2rem] border border-sand bg-espresso px-5 py-7 text-cream shadow-[0_38px_90px_-58px_rgba(43,33,26,0.9)] sm:px-8 lg:px-10">
+        <div className="grid gap-8 lg:grid-cols-[0.9fr_1.6fr] lg:items-center">
+          <div>
+            <div className="flex items-center gap-4 text-[11px] uppercase tracking-[0.3em] text-mocha">
+              <span className="h-px w-10 bg-mocha/70" />
+              Project Compass
+            </div>
+            <h2 className="mt-5 font-serif text-3xl leading-tight text-cream sm:text-5xl">
+              프로젝트를 기능이 아니라
+              <br />
+              흐름으로 읽히게 정리했습니다.
+            </h2>
+            <p className="mt-5 max-w-md text-[13.5px] leading-relaxed text-sand">
+              문제를 어떻게 정의했고, 어떤 구조로 연결했으며, 결과가 어떤 사용 흐름으로 보이는지 먼저 확인할 수 있습니다.
+            </p>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            {featured.map((p, index) => {
+              const tone = projectTones[p.id] ?? projectTones["dspy-ad"];
+              const lens = projectLenses[p.id];
+
+              return (
+                <motion.a
+                  key={p.id}
+                  href={p.id === "pulse" ? "#projects" : `#project-${p.id}`}
+                  whileHover={{ y: -6, scale: 1.015 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                  className="group relative overflow-hidden rounded-2xl border border-white/12 bg-white/[0.055] p-5 transition-colors duration-500 hover:bg-white/[0.09]"
+                >
+                  <span
+                    aria-hidden
+                    className="absolute -right-3 -top-4 font-display text-7xl leading-none opacity-10 transition-transform duration-500 group-hover:rotate-3 group-hover:scale-110"
+                    style={{ color: tone.accent }}
+                  >
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <div className="relative z-10">
+                    <div className="flex items-center justify-between gap-4">
+                      <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-mocha">
+                        Main Project {p.num}
+                      </span>
+                      <span
+                        className="h-2.5 w-2.5 rounded-full"
+                        style={{ backgroundColor: tone.accent }}
+                      />
+                    </div>
+                    <p className="mt-4 font-serif text-3xl text-cream">
+                      {p.title}
+                    </p>
+                    <p className="mt-2 text-[12.5px] leading-relaxed text-sand">
+                      {lens?.problem ?? p.subtitle}
+                    </p>
+                    <div className="mt-5 flex flex-wrap gap-2">
+                      {(p.keywords ?? p.tags).slice(0, 3).map((keyword) => (
+                        <span
+                          key={keyword}
+                          className="rounded-full border border-white/14 bg-white/[0.06] px-3 py-1 text-[10px] uppercase tracking-[0.14em] text-cream"
+                        >
+                          {keyword}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </motion.a>
+              );
+            })}
+          </div>
+        </div>
+      </div>
     </Reveal>
   );
 }
@@ -311,6 +495,8 @@ export function Work() {
   return (
     <section id="work" className="relative bg-cream py-20 sm:py-28">
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
+        <ProjectCompass />
+
         <Reveal className="mb-10 flex items-center gap-4 text-[12px] uppercase tracking-[0.3em] text-caramel">
           <span className="h-px w-10 bg-caramel/60" />
           Main Project 02-04
