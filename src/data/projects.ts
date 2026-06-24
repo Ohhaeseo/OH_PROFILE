@@ -111,7 +111,6 @@ export const projects: Project[] = [
       "CLIP은 의미 정합성, VQA는 광고 구조 반영도를 평가하도록 분리해 결과를 해석했습니다.",
     ],
     cover: `${A}/jcct-dspy-paper.png`,
-    gallery: [`${A}/kci-paper.png`, `${A}/pulse-pipeline.png`],
     featured: true,
   },
   {

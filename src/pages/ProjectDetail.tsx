@@ -692,15 +692,17 @@ export function ProjectDetail() {
             </aside>
           </div>
 
-          <div className="relative mt-14 overflow-hidden rounded-[2rem] border border-cream/15 bg-cream/10 p-3 shadow-[0_70px_160px_-70px_rgba(0,0,0,0.9)]">
-            <motion.img
-              src={project.cover}
-              alt={project.title}
-              whileHover={{ y: -8, rotate: -0.25 }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className={imageClassName(project, "aspect-[4/3] bg-cream sm:aspect-[16/8.1]")}
-            />
-          </div>
+          {project.id !== "dspy-ad" && (
+            <div className="relative mt-14 overflow-hidden rounded-[2rem] border border-cream/15 bg-cream/10 p-3 shadow-[0_70px_160px_-70px_rgba(0,0,0,0.9)]">
+              <motion.img
+                src={project.cover}
+                alt={project.title}
+                whileHover={{ y: -8, rotate: -0.25 }}
+                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                className={imageClassName(project, "aspect-[4/3] bg-cream sm:aspect-[16/8.1]")}
+              />
+            </div>
+          )}
         </div>
       </section>
 
