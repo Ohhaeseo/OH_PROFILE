@@ -1,6 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import { Reveal } from "../components/Reveal";
 
 const gradeStats = [
   { label: "총 평점 평균", value: "3.71", note: "누적 GPA" },
@@ -71,19 +70,28 @@ const evidenceDocs = [
   },
 ];
 
+const fadeIn = {
+  initial: { opacity: 0, y: 24 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.75, ease: [0.16, 1, 0.3, 1] },
+};
+
 export function AcademicRecord() {
   const [activeDoc, setActiveDoc] = useState<(typeof evidenceDocs)[number] | null>(null);
 
   return (
     <section id="records" className="relative bg-linen py-24 sm:py-32">
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
-        <Reveal className="mb-8 flex items-center gap-4 text-[12px] uppercase tracking-[0.3em] text-caramel">
+        <motion.div
+          {...fadeIn}
+          className="mb-8 flex items-center gap-4 text-[12px] uppercase tracking-[0.3em] text-caramel"
+        >
           <span className="h-px w-10 bg-caramel/60" />
           Records · 성적과 장학
-        </Reveal>
+        </motion.div>
 
         <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-stretch">
-          <Reveal>
+          <motion.div {...fadeIn}>
             <div className="h-full rounded-[2rem] border border-sand bg-cream p-7 shadow-[0_34px_80px_-66px_rgba(74,58,44,0.72)] sm:p-9">
               <p className="text-[12px] font-semibold uppercase tracking-[0.28em] text-caramel">
                 Academic Snapshot
@@ -120,9 +128,13 @@ export function AcademicRecord() {
                 ))}
               </div>
             </div>
-          </Reveal>
+          </motion.div>
 
-          <Reveal delay={0.08}>
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.75, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+          >
             <div className="h-full overflow-hidden rounded-[2rem] border border-sand bg-espresso p-5 text-cream shadow-[0_34px_90px_-60px_rgba(43,33,26,0.86)] sm:p-7">
               <div className="flex flex-wrap items-end justify-between gap-5 border-b border-cream/10 pb-6">
                 <div>
@@ -143,11 +155,10 @@ export function AcademicRecord() {
                   <motion.div
                     key={item.term}
                     initial={{ opacity: 0, x: -16 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true, margin: "-80px" }}
+                    animate={{ opacity: 1, x: 0 }}
                     transition={{
                       duration: 0.55,
-                      delay: index * 0.05,
+                      delay: 0.16 + index * 0.05,
                       ease: [0.16, 1, 0.3, 1],
                     }}
                     className="grid gap-4 py-5 sm:grid-cols-[6rem_1fr_auto] sm:items-center"
@@ -169,10 +180,15 @@ export function AcademicRecord() {
                 성적증명 및 장학수혜 확인서 기준으로 정리했으며, 포트폴리오에는 확인에 필요한 성과 정보만 노출했습니다.
               </p>
             </div>
-          </Reveal>
+          </motion.div>
         </div>
 
-        <Reveal className="mt-16">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.75, delay: 0.14, ease: [0.16, 1, 0.3, 1] }}
+          className="mt-16"
+        >
           <div className="grid gap-8 rounded-[2rem] border border-sand bg-cream p-5 shadow-[0_34px_80px_-66px_rgba(74,58,44,0.72)] sm:p-8 lg:grid-cols-[0.75fr_1.25fr] lg:items-center">
             <div>
               <p className="text-[12px] font-semibold uppercase tracking-[0.28em] text-caramel">
@@ -240,7 +256,7 @@ export function AcademicRecord() {
               </div>
             </div>
           </div>
-        </Reveal>
+        </motion.div>
       </div>
 
       <AnimatePresence>

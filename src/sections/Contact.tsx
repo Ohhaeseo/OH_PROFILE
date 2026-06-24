@@ -1,6 +1,11 @@
 import { motion } from "framer-motion";
 import { profile } from "../data/profile";
-import { Reveal } from "../components/Reveal";
+
+const fadeUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 24 },
+  animate: { opacity: 1, y: 0 },
+  transition: { duration: 0.75, delay, ease: [0.16, 1, 0.3, 1] },
+});
 
 export function Contact() {
   return (
@@ -19,27 +24,30 @@ export function Contact() {
       />
 
       <div className="relative mx-auto max-w-[1400px] px-5 text-center sm:px-8">
-        <Reveal className="mb-7 flex items-center justify-center gap-3 text-[12px] uppercase tracking-[0.32em] text-caramel">
+        <motion.div
+          {...fadeUp()}
+          className="mb-7 flex items-center justify-center gap-3 text-[12px] uppercase tracking-[0.32em] text-caramel"
+        >
           Next Step
-        </Reveal>
+        </motion.div>
 
-        <Reveal>
+        <motion.div {...fadeUp(0.05)}>
           <h2 className="mx-auto max-w-4xl font-serif text-[10vw] leading-[1.05] tracking-tight sm:text-[clamp(2.5rem,6vw,5.5rem)]">
             사용자의 흐름을 읽고,
             <br />
             <span className="text-mocha">끝까지 연결하는 개발자.</span>
           </h2>
-        </Reveal>
+        </motion.div>
 
-        <Reveal delay={0.1}>
+        <motion.div {...fadeUp(0.1)}>
           <p className="mx-auto mt-9 max-w-md text-[15px] leading-loose text-cream/70 sm:text-base">
             함께 이야기해 보고 싶은 프로젝트가 있다면
             <br className="hidden sm:block" />
             편하게 연락 주세요.
           </p>
-        </Reveal>
+        </motion.div>
 
-        <Reveal delay={0.16}>
+        <motion.div {...fadeUp(0.16)}>
           <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-5">
             <motion.a
               href={`mailto:${profile.email}`}
@@ -58,9 +66,9 @@ export function Contact() {
               {profile.githubLabel} ↗
             </motion.a>
           </div>
-        </Reveal>
+        </motion.div>
 
-        <Reveal delay={0.2}>
+        <motion.div {...fadeUp(0.2)}>
           <div className="mt-20 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[12px] text-cream/50">
             <span>{profile.name} · OH HAESEO</span>
             <span className="hidden h-3 w-px bg-cream/20 sm:inline-block" />
@@ -68,11 +76,11 @@ export function Contact() {
             <span className="hidden h-3 w-px bg-cream/20 sm:inline-block" />
             <span>{profile.phone}</span>
           </div>
-        </Reveal>
+        </motion.div>
 
-        <Reveal delay={0.24}>
+        <motion.div {...fadeUp(0.24)}>
           <p className="mt-16 font-serif text-2xl text-cream/80">감사합니다.</p>
-        </Reveal>
+        </motion.div>
       </div>
     </section>
   );
