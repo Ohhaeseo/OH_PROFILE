@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const gradeStats = [
   { label: "총 평점 평균", value: "3.71", note: "누적 GPA" },
@@ -11,22 +11,18 @@ const scholarships = [
   {
     term: "2024-1",
     title: "면학장학금 · 경진대회장학금",
-    amount: "675,000원",
   },
   {
     term: "2024-2",
     title: "재학생성적우수 C급(우등) · 면학장학금",
-    amount: "2,508,000원",
   },
   {
     term: "2025-1",
     title: "부학생회장 봉사장학금 · 면학/경진대회장학금",
-    amount: "1,926,500원",
   },
   {
     term: "2025-2",
     title: "부학생회장 봉사장학금 · 경진대회장학금",
-    amount: "1,386,500원",
   },
 ];
 
@@ -77,7 +73,33 @@ const fadeIn = {
 };
 
 export function AcademicRecord() {
-  const [activeDoc, setActiveDoc] = useState<(typeof evidenceDocs)[number] | null>(null);
+  const [activeDocIndex, setActiveDocIndex] = useState<number | null>(null);
+  const activeDoc = activeDocIndex === null ? null : evidenceDocs[activeDocIndex];
+
+  const showPrevDoc = () => {
+    setActiveDocIndex((current) =>
+      current === null ? current : (current - 1 + evidenceDocs.length) % evidenceDocs.length,
+    );
+  };
+
+  const showNextDoc = () => {
+    setActiveDocIndex((current) =>
+      current === null ? current : (current + 1) % evidenceDocs.length,
+    );
+  };
+
+  useEffect(() => {
+    if (activeDocIndex === null) return undefined;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setActiveDocIndex(null);
+      if (event.key === "ArrowLeft") showPrevDoc();
+      if (event.key === "ArrowRight") showNextDoc();
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [activeDocIndex]);
 
   return (
     <section id="records" className="relative bg-linen py-24 sm:py-32">
@@ -142,7 +164,7 @@ export function AcademicRecord() {
                     Scholarship Timeline
                   </p>
                   <h3 className="mt-3 font-serif text-3xl text-cream sm:text-4xl">
-                    총 장학 수혜 6,496,000원
+                    장학 수혜 기록
                   </h3>
                 </div>
                 <span className="rounded-full border border-cream/15 bg-white/[0.06] px-4 py-2 text-[12px] text-sand">
@@ -161,7 +183,7 @@ export function AcademicRecord() {
                       delay: 0.16 + index * 0.05,
                       ease: [0.16, 1, 0.3, 1],
                     }}
-                    className="grid gap-4 py-5 sm:grid-cols-[6rem_1fr_auto] sm:items-center"
+                    className="grid gap-4 py-5 sm:grid-cols-[6rem_1fr] sm:items-center"
                   >
                     <span className="font-display text-3xl leading-none text-caramel">
                       {item.term}
@@ -169,9 +191,6 @@ export function AcademicRecord() {
                     <p className="text-[14px] leading-relaxed text-sand">
                       {item.title}
                     </p>
-                    <strong className="text-base text-cream">
-                      {item.amount}
-                    </strong>
                   </motion.div>
                 ))}
               </div>
@@ -222,7 +241,7 @@ export function AcademicRecord() {
                       key={doc.id}
                       type="button"
                       layoutId={`evidence-${doc.id}`}
-                      onClick={() => setActiveDoc(doc)}
+                      onClick={() => setActiveDocIndex(index)}
                       whileHover={{
                         y: -12,
                         rotate: rotations[index] * 0.45,
@@ -266,7 +285,7 @@ export function AcademicRecord() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setActiveDoc(null)}
+            onClick={() => setActiveDocIndex(null)}
           >
             <motion.div
               layoutId={`evidence-${activeDoc.id}`}
@@ -275,26 +294,71 @@ export function AcademicRecord() {
             >
               <button
                 type="button"
-                onClick={() => setActiveDoc(null)}
+                onClick={() => setActiveDocIndex(null)}
                 className="absolute right-5 top-5 z-10 rounded-full bg-espresso px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.18em] text-cream shadow-[0_20px_50px_-30px_rgba(0,0,0,0.9)] transition-colors hover:bg-caramel"
               >
                 Close
               </button>
-              <img
-                src={activeDoc.src}
-                alt={activeDoc.title}
-                className="max-h-[78vh] w-full rounded-[1.2rem] object-contain"
-              />
+              <div className="relative overflow-hidden rounded-[1.2rem] bg-linen">
+                <AnimatePresence mode="wait">
+                  <motion.img
+                    key={activeDoc.id}
+                    src={activeDoc.src}
+                    alt={activeDoc.title}
+                    initial={{ opacity: 0, x: 70, scale: 0.985 }}
+                    animate={{ opacity: 1, x: 0, scale: 1 }}
+                    exit={{ opacity: 0, x: -70, scale: 0.985 }}
+                    transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
+                    className="max-h-[78vh] w-full object-contain"
+                  />
+                </AnimatePresence>
+
+                <button
+                  type="button"
+                  onClick={showPrevDoc}
+                  className="absolute left-4 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-espresso/10 bg-cream/88 text-xl text-espresso shadow-[0_20px_45px_-30px_rgba(0,0,0,0.8)] backdrop-blur transition-all hover:-translate-x-1 hover:bg-espresso hover:text-cream"
+                  aria-label="이전 증빙 보기"
+                >
+                  ←
+                </button>
+                <button
+                  type="button"
+                  onClick={showNextDoc}
+                  className="absolute right-4 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-espresso/10 bg-cream/88 text-xl text-espresso shadow-[0_20px_45px_-30px_rgba(0,0,0,0.8)] backdrop-blur transition-all hover:translate-x-1 hover:bg-espresso hover:text-cream"
+                  aria-label="다음 증빙 보기"
+                >
+                  →
+                </button>
+              </div>
               <div className="px-3 pb-3 pt-4">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-caramel">
-                  {activeDoc.label}
-                </p>
-                <h4 className="mt-1 font-serif text-2xl text-espresso">
-                  {activeDoc.title}
-                </h4>
-                <p className="mt-1 text-[13px] text-coffee">
-                  {activeDoc.desc}
-                </p>
+                <div className="flex flex-wrap items-end justify-between gap-3">
+                  <div>
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-caramel">
+                      {activeDoc.label}
+                    </p>
+                    <h4 className="mt-1 font-serif text-2xl text-espresso">
+                      {activeDoc.title}
+                    </h4>
+                    <p className="mt-1 text-[13px] text-coffee">
+                      {activeDoc.desc}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    {evidenceDocs.map((doc, index) => (
+                      <button
+                        key={doc.id}
+                        type="button"
+                        onClick={() => setActiveDocIndex(index)}
+                        className={`h-2.5 rounded-full transition-all ${
+                          index === activeDocIndex
+                            ? "w-7 bg-caramel"
+                            : "w-2.5 bg-sand hover:bg-mocha"
+                        }`}
+                        aria-label={`${doc.title} 보기`}
+                      />
+                    ))}
+                  </div>
+                </div>
               </div>
             </motion.div>
           </motion.div>
