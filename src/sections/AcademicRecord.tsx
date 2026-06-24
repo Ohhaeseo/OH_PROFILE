@@ -1,4 +1,5 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
 import { Reveal } from "../components/Reveal";
 
 const gradeStats = [
@@ -30,7 +31,49 @@ const scholarships = [
   },
 ];
 
+const A = `${import.meta.env.BASE_URL}assets/records`;
+
+const evidenceDocs = [
+  {
+    id: "grade-summary",
+    title: "성적 및 이수 학점",
+    label: "Grade Proof",
+    src: `${A}/grade-summary.webp`,
+    desc: "총취득학점 104 · 총평점평균 3.71",
+  },
+  {
+    id: "scholarship-2024-1",
+    title: "2024-1 장학",
+    label: "Scholarship",
+    src: `${A}/scholarship-2024-1.webp`,
+    desc: "면학장학금 · 경진대회장학금",
+  },
+  {
+    id: "scholarship-2024-2",
+    title: "2024-2 장학",
+    label: "Scholarship",
+    src: `${A}/scholarship-2024-2.webp`,
+    desc: "성적우수 C급(우등) · 면학장학금",
+  },
+  {
+    id: "scholarship-2025-1",
+    title: "2025-1 장학",
+    label: "Scholarship",
+    src: `${A}/scholarship-2025-1.webp`,
+    desc: "부학생회장 봉사 · 면학/경진대회",
+  },
+  {
+    id: "scholarship-2025-2",
+    title: "2025-2 장학",
+    label: "Scholarship",
+    src: `${A}/scholarship-2025-2.webp`,
+    desc: "부학생회장 봉사 · 경진대회",
+  },
+];
+
 export function AcademicRecord() {
+  const [activeDoc, setActiveDoc] = useState<(typeof evidenceDocs)[number] | null>(null);
+
   return (
     <section id="records" className="relative bg-linen py-24 sm:py-32">
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
@@ -128,7 +171,119 @@ export function AcademicRecord() {
             </div>
           </Reveal>
         </div>
+
+        <Reveal className="mt-16">
+          <div className="grid gap-8 rounded-[2rem] border border-sand bg-cream p-5 shadow-[0_34px_80px_-66px_rgba(74,58,44,0.72)] sm:p-8 lg:grid-cols-[0.75fr_1.25fr] lg:items-center">
+            <div>
+              <p className="text-[12px] font-semibold uppercase tracking-[0.28em] text-caramel">
+                Evidence Cards
+              </p>
+              <h3 className="mt-4 font-serif text-3xl leading-tight text-espresso sm:text-4xl">
+                PDF 자료도 작게나마
+                <br />
+                함께 확인할 수 있게.
+              </h3>
+              <p className="mt-5 max-w-md text-[13.5px] leading-loose text-coffee">
+                성적증명서와 장학수혜 확인서에서 필요한 영역만 이미지로 담았습니다. 개인정보 영역은 포트폴리오 공개를 고려해 가렸고, 카드를 누르면 크게 볼 수 있습니다.
+              </p>
+            </div>
+
+            <div className="relative min-h-[440px] overflow-hidden rounded-[1.6rem] bg-linen/70 p-5 sm:min-h-[500px]">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(166,114,75,0.16),transparent_32%),radial-gradient(circle_at_76%_72%,rgba(43,33,26,0.12),transparent_34%)]" />
+              <div className="relative grid h-full place-items-center">
+                {evidenceDocs.map((doc, index) => {
+                  const rotations = [-8, 7, -1, 10, -11];
+                  const positions = [
+                    "left-[2%] top-[16%]",
+                    "right-[3%] top-[8%]",
+                    "left-1/2 top-[22%] -translate-x-1/2",
+                    "right-[0%] bottom-[10%]",
+                    "left-[7%] bottom-[7%]",
+                  ];
+
+                  return (
+                    <motion.button
+                      key={doc.id}
+                      type="button"
+                      layoutId={`evidence-${doc.id}`}
+                      onClick={() => setActiveDoc(doc)}
+                      whileHover={{
+                        y: -12,
+                        rotate: rotations[index] * 0.45,
+                        scale: 1.04,
+                      }}
+                      whileTap={{ scale: 0.98 }}
+                      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                      className={`group absolute w-[58%] max-w-[360px] rounded-[1.15rem] border border-white/80 bg-cream p-2 text-left shadow-[0_26px_70px_-42px_rgba(43,33,26,0.8)] ${positions[index]}`}
+                      style={{ rotate: `${rotations[index]}deg`, zIndex: index === 2 ? 5 : index + 1 }}
+                      aria-label={`${doc.title} 증빙 크게 보기`}
+                    >
+                      <div className="overflow-hidden rounded-[0.9rem] bg-white">
+                        <img
+                          src={doc.src}
+                          alt={doc.title}
+                          loading="lazy"
+                          className="aspect-[1.55/1] w-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.04]"
+                        />
+                      </div>
+                      <div className="px-2 pb-2 pt-3">
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-caramel">
+                          {doc.label}
+                        </p>
+                        <p className="mt-1 text-[13px] font-semibold text-espresso">
+                          {doc.title}
+                        </p>
+                      </div>
+                    </motion.button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </Reveal>
       </div>
+
+      <AnimatePresence>
+        {activeDoc && (
+          <motion.div
+            className="fixed inset-0 z-[90] grid place-items-center bg-espresso/72 px-4 py-6 backdrop-blur-md"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setActiveDoc(null)}
+          >
+            <motion.div
+              layoutId={`evidence-${activeDoc.id}`}
+              className="relative w-full max-w-5xl overflow-hidden rounded-[1.6rem] border border-cream/20 bg-cream p-3 shadow-[0_50px_140px_-55px_rgba(0,0,0,0.95)]"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <button
+                type="button"
+                onClick={() => setActiveDoc(null)}
+                className="absolute right-5 top-5 z-10 rounded-full bg-espresso px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.18em] text-cream shadow-[0_20px_50px_-30px_rgba(0,0,0,0.9)] transition-colors hover:bg-caramel"
+              >
+                Close
+              </button>
+              <img
+                src={activeDoc.src}
+                alt={activeDoc.title}
+                className="max-h-[78vh] w-full rounded-[1.2rem] object-contain"
+              />
+              <div className="px-3 pb-3 pt-4">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-caramel">
+                  {activeDoc.label}
+                </p>
+                <h4 className="mt-1 font-serif text-2xl text-espresso">
+                  {activeDoc.title}
+                </h4>
+                <p className="mt-1 text-[13px] text-coffee">
+                  {activeDoc.desc}
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
