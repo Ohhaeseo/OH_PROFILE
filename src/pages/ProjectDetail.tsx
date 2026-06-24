@@ -622,17 +622,17 @@ export function ProjectDetail() {
           <div className="mt-14 grid min-w-0 gap-10 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-end">
             <div>
               <div
-                className="type-eyebrow flex flex-wrap items-center gap-3 text-[11px]"
+                className="type-eyebrow flex flex-wrap items-center gap-3 text-[10px] sm:text-[11px]"
                 style={{ color: skin.onDark }}
               >
-                <span>{detail.label}</span>
+                <span className="type-nowrap">{detail.label}</span>
                 <span
                   className="h-px w-10"
                   style={{ backgroundColor: skin.onDark }}
                 />
-                <span>{detail.category}</span>
+                <span className="type-nowrap">{detail.category}</span>
               </div>
-              <h1 className="type-serif-title mt-7 break-words text-[clamp(3.8rem,16vw,12rem)] leading-[0.82] text-cream">
+              <h1 className="type-serif-title type-hero-english mt-7 text-[clamp(2.65rem,10.5vw,7.9rem)] leading-[0.9] text-cream sm:text-[clamp(4rem,9.2vw,8.6rem)]">
                 {project.title}
               </h1>
               <p className="mt-8 max-w-3xl text-[clamp(1.05rem,2vw,1.7rem)] leading-relaxed text-cream/76">

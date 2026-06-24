@@ -208,7 +208,7 @@ export function AcademicRecord() {
           transition={{ duration: 0.75, delay: 0.14, ease: [0.16, 1, 0.3, 1] }}
           className="mt-16"
         >
-          <div className="grid gap-8 rounded-[2rem] border border-sand bg-cream p-5 shadow-[0_34px_80px_-66px_rgba(74,58,44,0.72)] sm:p-8 lg:grid-cols-[0.75fr_1.25fr] lg:items-center">
+          <div className="rounded-[2rem] border border-sand bg-cream p-5 shadow-[0_34px_80px_-66px_rgba(74,58,44,0.72)] sm:p-8">
             <div>
               <p className="text-[12px] font-semibold uppercase tracking-[0.28em] text-caramel">
                 Evidence Cards
@@ -223,56 +223,43 @@ export function AcademicRecord() {
               </p>
             </div>
 
-            <div className="relative min-h-[440px] overflow-hidden rounded-[1.6rem] bg-linen/70 p-5 sm:min-h-[500px]">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(166,114,75,0.16),transparent_32%),radial-gradient(circle_at_76%_72%,rgba(43,33,26,0.12),transparent_34%)]" />
-              <div className="relative grid h-full place-items-center">
-                {evidenceDocs.map((doc, index) => {
-                  const rotations = [-8, 7, -1, 10, -11];
-                  const positions = [
-                    "left-[2%] top-[16%]",
-                    "right-[3%] top-[8%]",
-                    "left-1/2 top-[22%] -translate-x-1/2",
-                    "right-[0%] bottom-[10%]",
-                    "left-[7%] bottom-[7%]",
-                  ];
-
-                  return (
-                    <motion.button
-                      key={doc.id}
-                      type="button"
-                      layoutId={`evidence-${doc.id}`}
-                      onClick={() => setActiveDocIndex(index)}
-                      whileHover={{
-                        y: -12,
-                        rotate: rotations[index] * 0.45,
-                        scale: 1.04,
-                      }}
-                      whileTap={{ scale: 0.98 }}
-                      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                      className={`group absolute w-[58%] max-w-[360px] rounded-[1.15rem] border border-white/80 bg-cream p-2 text-left shadow-[0_26px_70px_-42px_rgba(43,33,26,0.8)] ${positions[index]}`}
-                      style={{ rotate: `${rotations[index]}deg`, zIndex: index === 2 ? 5 : index + 1 }}
-                      aria-label={`${doc.title} 증빙 크게 보기`}
-                    >
-                      <div className="overflow-hidden rounded-[0.9rem] bg-white">
-                        <img
-                          src={doc.src}
-                          alt={doc.title}
-                          loading="lazy"
-                          className="aspect-[1.55/1] w-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.04]"
-                        />
-                      </div>
-                      <div className="px-2 pb-2 pt-3">
-                        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-caramel">
-                          {doc.label}
-                        </p>
-                        <p className="mt-1 text-[13px] font-semibold text-espresso">
-                          {doc.title}
-                        </p>
-                      </div>
-                    </motion.button>
-                  );
-                })}
-              </div>
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+              {evidenceDocs.map((doc, index) => (
+                <motion.button
+                  key={doc.id}
+                  type="button"
+                  layoutId={`evidence-${doc.id}`}
+                  onClick={() => setActiveDocIndex(index)}
+                  initial={{ opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  whileHover={{ y: -8 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{
+                    duration: 0.45,
+                    delay: index * 0.035,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
+                  className="group min-w-0 rounded-[1.15rem] border border-sand bg-linen/70 p-2 text-left shadow-[0_24px_58px_-44px_rgba(74,58,44,0.76)] transition-colors hover:bg-cream"
+                  aria-label={`${doc.title} 증빙 크게 보기`}
+                >
+                  <div className="overflow-hidden rounded-[0.9rem] bg-white ring-1 ring-white/80">
+                    <img
+                      src={doc.src}
+                      alt={doc.title}
+                      loading="lazy"
+                      className="aspect-[1.55/1] w-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.04]"
+                    />
+                  </div>
+                  <div className="px-2 pb-2 pt-3">
+                    <p className="type-nowrap text-[10px] font-semibold uppercase tracking-[0.16em] text-caramel">
+                      {doc.label}
+                    </p>
+                    <p className="mt-1 text-[13px] font-semibold text-espresso">
+                      {doc.title}
+                    </p>
+                  </div>
+                </motion.button>
+              ))}
             </div>
           </div>
         </motion.div>
