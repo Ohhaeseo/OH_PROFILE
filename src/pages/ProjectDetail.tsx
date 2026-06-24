@@ -60,6 +60,34 @@ const roomSkins: Record<string, RoomSkin> = {
   },
 };
 
+const galleryCaptions: Record<string, string[]> = {
+  pulse: [
+    "분석부터 영상 제작까지를 한 문장으로 약속하는 첫 화면",
+    "리뷰와 상권 데이터를 연결해 고객 인사이트를 만드는 화면",
+    "사진 한 장이 곧바로 홍보 콘텐츠가 되는 영상 제작 화면",
+    "가게 운영자가 다음 행동을 확인하는 대시보드",
+    "인플루언서 매칭을 Pro 기능으로 분리한 확장 흐름",
+    "AI 분석 서버와 Spring API가 만나는 기술 구조",
+    "서비스가 지속 가능한 모델로 이어지는 기획 자료",
+  ],
+  "vr-live": [
+    "VR 공간에서 발표와 면접 연습을 시작하는 메인 화면",
+    "PDF 발표자료를 띄우고 실제 발표처럼 연습하는 Office Room",
+    "질문과 답변을 반복하며 면접 흐름을 연습하는 Interview Room",
+  ],
+  nullnull: [
+    "서울 여행자가 현재 상황을 먼저 확인하는 홈 화면",
+    "서비스 목적과 사용 흐름을 짧게 설명하는 온보딩",
+    "혼잡과 날씨를 함께 판단하는 AI Nowcasting 화면",
+    "장소별 리스크와 대안 행동을 확인하는 상세 화면",
+  ],
+  "dspy-ad": [
+    "광고 장면 구조를 프롬프트 생성 프레임워크로 정리한 논문 자료",
+    "연구 확장과 등재 흐름을 정리한 보조 논문 자료",
+    "PULSE 영상 생성 파이프라인과 맞닿는 프롬프트 구조",
+  ],
+};
+
 type DetailCopy = {
   label: string;
   category: string;
@@ -410,12 +438,12 @@ function LightChip({ children }: { children: string }) {
   );
 }
 
-function shouldContainImage(project: Project) {
-  return project.id === "dspy-ad" || project.id === "nullnull";
+function shouldContainImage() {
+  return true;
 }
 
-function imageClassName(project: Project, extra = "") {
-  const fit = shouldContainImage(project)
+function imageClassName(_project: Project, extra = "") {
+  const fit = shouldContainImage()
     ? "object-contain object-center"
     : "object-cover object-top";
   return `warm-screenshot w-full rounded-[1.35rem] ${fit} ${extra}`;
@@ -619,8 +647,8 @@ export function ProjectDetail() {
             프로젝트 목록으로
           </Link>
 
-          <div className="mt-14 grid min-w-0 gap-10 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-end">
-            <div>
+          <div className="mt-14 grid min-w-0 gap-10 lg:grid-cols-[minmax(0,1fr)_420px] lg:items-end">
+            <div className="relative z-10 min-w-0">
               <div
                 className="type-eyebrow flex flex-wrap items-center gap-3 text-[10px] sm:text-[11px]"
                 style={{ color: skin.onDark }}
@@ -632,7 +660,7 @@ export function ProjectDetail() {
                 />
                 <span className="type-nowrap">{detail.category}</span>
               </div>
-              <h1 className="type-serif-title type-hero-english mt-7 text-[clamp(2.65rem,10.5vw,7.9rem)] leading-[0.9] text-cream sm:text-[clamp(4rem,9.2vw,8.6rem)]">
+              <h1 className="type-serif-title type-hero-english mt-7 max-w-full text-[clamp(2.35rem,5.6vw,5.05rem)] leading-[0.94] text-cream">
                 {project.title}
               </h1>
               <p className="mt-8 max-w-3xl text-[clamp(1.05rem,2vw,1.7rem)] leading-relaxed text-cream/76">
@@ -640,18 +668,18 @@ export function ProjectDetail() {
               </p>
             </div>
 
-            <aside className="rounded-[1.4rem] border border-cream/15 bg-cream/[0.06] p-6 shadow-[0_30px_100px_-65px_rgba(0,0,0,0.85)] backdrop-blur">
+            <aside className="relative z-20 rounded-[1.4rem] border border-cream/24 bg-espresso/82 p-7 shadow-[0_34px_110px_-58px_rgba(0,0,0,0.95)] backdrop-blur-xl">
               <p
                 className="type-eyebrow text-[12px]"
                 style={{ color: skin.onDark }}
               >
                 프로젝트 정보
               </p>
-              <div className="mt-6 space-y-5 text-[14px] leading-relaxed text-cream/75">
-                <p>{project.year}</p>
+              <div className="mt-7 space-y-5 border-l border-cream/18 pl-5 text-[15px] leading-relaxed text-cream/86">
+                <p className="font-medium">{project.year}</p>
                 <p>{project.role}</p>
                 {project.award && (
-                  <p className="w-fit rounded-full bg-cream/10 px-3 py-1 text-[12px] font-medium text-cream ring-1 ring-cream/20">
+                  <p className="w-fit rounded-full bg-cream/14 px-3 py-1 text-[12px] font-semibold text-cream ring-1 ring-cream/28">
                     {project.award}
                   </p>
                 )}
@@ -859,49 +887,54 @@ export function ProjectDetail() {
         </div>
       </section>
 
-      {project.id !== "dspy-ad" && project.gallery && project.gallery.length > 0 && (
+      {project.gallery && project.gallery.length > 0 && (
         <section className="px-5 py-16 sm:px-10 sm:py-24 lg:px-16 xl:px-20">
-          <div className="mx-auto max-w-[1120px]">
+          <div className="mx-auto max-w-[1280px]">
             <Reveal>
               <p className="type-eyebrow text-[12px] text-caramel">
                 화면 자료
               </p>
-              <h2 className="type-korean-title mt-4 text-4xl leading-tight text-espresso sm:text-5xl">
-                화면과 자료를 프로젝트별 맥락에 맞게 담았습니다.
+              <h2 className="type-korean-title mt-4 max-w-4xl text-4xl leading-tight text-espresso sm:text-5xl">
+                화면을 한 장씩 크게 보고, 프로젝트의 흐름을 따라갈 수 있게 정리했습니다.
               </h2>
             </Reveal>
 
-            <div className="mt-10 grid gap-5 md:grid-cols-2">
+            <div className="mt-12 grid gap-x-12 gap-y-20 lg:grid-cols-2">
               {[project.cover, ...(project.gallery ?? [])].map(
                 (image, index) => (
-                  <Reveal key={image} delay={index * 0.04}>
+                  <Reveal
+                    key={image}
+                    delay={index * 0.04}
+                    className={index % 2 === 1 ? "lg:translate-y-20" : ""}
+                  >
                     <motion.figure
                       whileHover={{
                         y: -8,
-                        rotate: index % 2 === 0 ? -0.25 : 0.25,
+                        rotate: index % 2 === 0 ? -0.18 : 0.18,
                       }}
                       transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
-                      className="group overflow-hidden rounded-[1.6rem] border border-sand bg-sand/35 p-2 shadow-[0_34px_80px_-52px_rgba(74,58,44,0.68)]"
+                      className="group overflow-hidden rounded-[2rem] border border-sand bg-cream p-3 shadow-[0_42px_120px_-72px_rgba(74,58,44,0.82)]"
                     >
-                      <div className="overflow-hidden rounded-[1.35rem] bg-cream">
-                      <img
-                        src={image}
-                        alt=""
-                        loading={index === 0 ? undefined : "lazy"}
-                        className={imageClassName(
-                          project,
-                          "aspect-[4/3] bg-cream",
-                        )}
-                      />
+                      <div className="overflow-hidden rounded-[1.65rem] bg-[#f7f8fb] ring-1 ring-sand/80">
+                        <img
+                          src={image}
+                          alt=""
+                          loading={index === 0 ? undefined : "lazy"}
+                          className={imageClassName(
+                            project,
+                            "aspect-[16/9] bg-cream",
+                          )}
+                        />
                       </div>
-                      <figcaption className="flex items-center justify-between px-3 pb-2 pt-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-caramel">
-                        <span>
-                          {index === 0
-                            ? "대표 화면"
-                            : `자료 ${String(index).padStart(2, "0")}`}
+                      <figcaption className="flex items-start justify-between gap-5 px-2 pb-2 pt-5">
+                        <span className="max-w-[92%] text-[15px] leading-relaxed text-coffee">
+                          {galleryCaptions[project.id]?.[index] ??
+                            (index === 0
+                              ? "프로젝트의 대표 화면"
+                              : `프로젝트 자료 ${String(index).padStart(2, "0")}`)}
                         </span>
                         <span
-                          className="h-2 w-2 rounded-full"
+                          className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full"
                           style={{ backgroundColor: skin.accent }}
                         />
                       </figcaption>

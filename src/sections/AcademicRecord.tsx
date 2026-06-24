@@ -26,7 +26,7 @@ const scholarships = [
   },
 ];
 
-const A = `${import.meta.env.BASE_URL}assets/records`;
+const A = `${import.meta.env.BASE_URL}images/grafe`;
 
 const evidenceDocs = [
   {
