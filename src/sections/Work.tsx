@@ -209,7 +209,10 @@ function MainProject({ p }: { p: Project }) {
       <div className="relative z-10">
         <Reveal>
           <div className="flex items-baseline gap-4">
-            <span className="font-display text-6xl leading-none" style={{ color: tone.muted }}>
+            <span
+              className="font-display text-6xl leading-none"
+              style={{ color: tone.muted }}
+            >
               {p.num}
             </span>
             {p.award && (
@@ -316,7 +319,7 @@ function SubProjectSection({
           }`}
           style={{ backgroundColor: tone.panel }}
         >
-          <span className="accent-spark absolute right-5 top-5 z-10">⌁</span>
+          <span className="accent-spark absolute right-5 top-5 z-10">✦</span>
           <div className="overflow-hidden rounded-2xl bg-cream">
             <img
               src={project.cover}
@@ -328,7 +331,10 @@ function SubProjectSection({
         </motion.div>
 
         <div className={`relative z-10 ${flip ? "lg:order-1" : ""}`}>
-          <span className="font-display text-6xl leading-none" style={{ color: tone.muted }}>
+          <span
+            className="font-display text-6xl leading-none"
+            style={{ color: tone.muted }}
+          >
             {project.num}
           </span>
           <p className="mt-5 text-[12px] font-semibold uppercase tracking-[0.28em] text-caramel">
@@ -382,85 +388,92 @@ function SubProjectSection({
   );
 }
 
-function ProjectCompass() {
+export function ProjectCompass() {
   const featured = projects
     .filter((p) => p.featured)
     .sort((a, b) => Number(a.num) - Number(b.num));
 
   return (
-    <Reveal>
-      <div className="mb-12 overflow-hidden rounded-[2rem] border border-sand bg-espresso px-5 py-7 text-cream shadow-[0_38px_90px_-58px_rgba(43,33,26,0.9)] sm:px-8 lg:px-10">
-        <div className="grid gap-8 lg:grid-cols-[0.9fr_1.6fr] lg:items-center">
-          <div>
-            <div className="flex items-center gap-4 text-[11px] uppercase tracking-[0.3em] text-mocha">
-              <span className="h-px w-10 bg-mocha/70" />
-              Project Compass
-            </div>
-            <h2 className="mt-5 font-serif text-3xl leading-tight text-cream sm:text-5xl">
-              프로젝트를 기능이 아니라
-              <br />
-              흐름으로 읽히게 정리했습니다.
-            </h2>
-            <p className="mt-5 max-w-md text-[13.5px] leading-relaxed text-sand">
-              문제를 어떻게 정의했고, 어떤 구조로 연결했으며, 결과가 어떤 사용 흐름으로 보이는지 먼저 확인할 수 있습니다.
-            </p>
-          </div>
+    <section
+      id="quick-projects"
+      className="relative overflow-hidden bg-linen py-20 sm:py-28"
+    >
+      <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
+        <Reveal>
+          <div className="overflow-hidden rounded-[2rem] border border-sand bg-espresso px-5 py-7 text-cream shadow-[0_38px_90px_-58px_rgba(43,33,26,0.9)] sm:px-8 lg:px-10">
+            <div className="grid gap-8 lg:grid-cols-[0.9fr_1.6fr] lg:items-center">
+              <div>
+                <div className="flex items-center gap-4 text-[11px] uppercase tracking-[0.3em] text-mocha">
+                  <span className="h-px w-10 bg-mocha/70" />
+                  Quick Jump · 핵심 프로젝트
+                </div>
+                <h2 className="mt-5 font-serif text-3xl leading-tight text-cream sm:text-5xl">
+                  보고 싶은 프로젝트로
+                  <br />
+                  바로 이동할 수 있게.
+                </h2>
+                <p className="mt-5 max-w-md text-[13.5px] leading-relaxed text-sand">
+                  긴 포트폴리오를 처음부터 읽지 않아도 핵심 프로젝트의 문제, 역할, 키워드를 빠르게 확인하고 원하는 위치로 이동할 수 있습니다.
+                </p>
+              </div>
 
-          <div className="grid gap-3 sm:grid-cols-2">
-            {featured.map((p, index) => {
-              const tone = projectTones[p.id] ?? projectTones["dspy-ad"];
-              const lens = projectLenses[p.id];
+              <div className="grid gap-3 sm:grid-cols-2">
+                {featured.map((p, index) => {
+                  const tone = projectTones[p.id] ?? projectTones["dspy-ad"];
+                  const lens = projectLenses[p.id];
 
-              return (
-                <motion.a
-                  key={p.id}
-                  href={p.id === "pulse" ? "#projects" : `#project-${p.id}`}
-                  whileHover={{ y: -6, scale: 1.015 }}
-                  whileTap={{ scale: 0.98 }}
-                  transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                  className="group relative overflow-hidden rounded-2xl border border-white/12 bg-white/[0.055] p-5 transition-colors duration-500 hover:bg-white/[0.09]"
-                >
-                  <span
-                    aria-hidden
-                    className="absolute -right-3 -top-4 font-display text-7xl leading-none opacity-10 transition-transform duration-500 group-hover:rotate-3 group-hover:scale-110"
-                    style={{ color: tone.accent }}
-                  >
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <div className="relative z-10">
-                    <div className="flex items-center justify-between gap-4">
-                      <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-mocha">
-                        Main Project {p.num}
-                      </span>
+                  return (
+                    <motion.a
+                      key={p.id}
+                      href={p.id === "pulse" ? "#projects" : `#project-${p.id}`}
+                      whileHover={{ y: -6, scale: 1.015 }}
+                      whileTap={{ scale: 0.98 }}
+                      transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                      className="group relative overflow-hidden rounded-2xl border border-white/12 bg-white/[0.055] p-5 transition-colors duration-500 hover:bg-white/[0.09]"
+                    >
                       <span
-                        className="h-2.5 w-2.5 rounded-full"
-                        style={{ backgroundColor: tone.accent }}
-                      />
-                    </div>
-                    <p className="mt-4 font-serif text-3xl text-cream">
-                      {p.title}
-                    </p>
-                    <p className="mt-2 text-[12.5px] leading-relaxed text-sand">
-                      {lens?.problem ?? p.subtitle}
-                    </p>
-                    <div className="mt-5 flex flex-wrap gap-2">
-                      {(p.keywords ?? p.tags).slice(0, 3).map((keyword) => (
-                        <span
-                          key={keyword}
-                          className="rounded-full border border-white/14 bg-white/[0.06] px-3 py-1 text-[10px] uppercase tracking-[0.14em] text-cream"
-                        >
-                          {keyword}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </motion.a>
-              );
-            })}
+                        aria-hidden
+                        className="absolute -right-3 -top-4 font-display text-7xl leading-none opacity-10 transition-transform duration-500 group-hover:rotate-3 group-hover:scale-110"
+                        style={{ color: tone.accent }}
+                      >
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <div className="relative z-10">
+                        <div className="flex items-center justify-between gap-4">
+                          <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-mocha">
+                            Main Project {p.num}
+                          </span>
+                          <span
+                            className="h-2.5 w-2.5 rounded-full"
+                            style={{ backgroundColor: tone.accent }}
+                          />
+                        </div>
+                        <p className="mt-4 font-serif text-3xl text-cream">
+                          {p.title}
+                        </p>
+                        <p className="mt-2 text-[12.5px] leading-relaxed text-sand">
+                          {lens?.problem ?? p.subtitle}
+                        </p>
+                        <div className="mt-5 flex flex-wrap gap-2">
+                          {(p.keywords ?? p.tags).slice(0, 3).map((keyword) => (
+                            <span
+                              key={keyword}
+                              className="rounded-full border border-white/14 bg-white/[0.06] px-3 py-1 text-[10px] uppercase tracking-[0.14em] text-cream"
+                            >
+                              {keyword}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.a>
+                  );
+                })}
+              </div>
+            </div>
           </div>
-        </div>
+        </Reveal>
       </div>
-    </Reveal>
+    </section>
   );
 }
 
@@ -495,8 +508,6 @@ export function Work() {
   return (
     <section id="work" className="relative bg-cream py-20 sm:py-28">
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
-        <ProjectCompass />
-
         <Reveal className="mb-10 flex items-center gap-4 text-[12px] uppercase tracking-[0.3em] text-caramel">
           <span className="h-px w-10 bg-caramel/60" />
           Main Project 02-04
