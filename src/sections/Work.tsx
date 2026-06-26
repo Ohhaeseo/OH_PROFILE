@@ -186,6 +186,39 @@ function MainProject({ p }: { p: Project }) {
               className={imageClassName(p.num)}
             />
           </div>
+          {p.extraCover && (
+            <motion.figure
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.45 }}
+              transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+              className="mt-3 overflow-hidden rounded-2xl bg-cream ring-1 ring-sand"
+            >
+              <img
+                src={p.extraCover.src}
+                alt={p.extraCover.label}
+                loading="lazy"
+                className="warm-screenshot aspect-[16/10] w-full object-cover object-center transition-transform duration-[1.2s] ease-out group-hover:scale-[1.025]"
+              />
+              <figcaption className="flex items-start justify-between gap-4 px-4 py-3">
+                <span>
+                  <span
+                    className="block text-[10px] font-semibold uppercase tracking-[0.18em]"
+                    style={{ color: tone.accent }}
+                  >
+                    {p.extraCover.label}
+                  </span>
+                  <span className="mt-1 block text-[12.5px] leading-relaxed text-coffee">
+                    {p.extraCover.caption}
+                  </span>
+                </span>
+                <span
+                  className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full"
+                  style={{ backgroundColor: tone.accent }}
+                />
+              </figcaption>
+            </motion.figure>
+          )}
           {p.gallery && p.id !== "nullnull" && (
             <div className="mt-3 grid grid-cols-3 gap-3">
               {p.gallery.map((g) => (

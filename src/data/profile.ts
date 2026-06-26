@@ -116,6 +116,14 @@ export type TimelineItem = {
 // 수상 (상장) — 활동과 섞지 않음
 export const awards: TimelineItem[] = [
   {
+    year: "2026",
+    grade: "학술",
+    title: "IPACT 국내학술대회",
+    award: "우수논문상",
+    desc: "광고 장면 구조 분석 기반 DSPy 프롬프트 생성 프레임워크 연구를 발표하고 우수논문으로 선정되었습니다.",
+    latest: true,
+  },
+  {
     year: "2025",
     grade: "3학년",
     title: "가상융합서비스 개발자 경진대회",

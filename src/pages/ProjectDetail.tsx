@@ -889,6 +889,54 @@ export function ProjectDetail() {
         </div>
       </section>
 
+      {project.detailAward && (
+        <section className="px-5 py-16 sm:px-10 sm:py-24 lg:px-16 xl:px-20">
+          <div className="mx-auto max-w-[1120px]">
+            <Reveal className="grid gap-10 rounded-[2rem] border border-sand bg-linen p-5 shadow-[0_38px_100px_-72px_rgba(74,58,44,0.72)] sm:p-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+              <div>
+                <p className="type-eyebrow text-[12px] text-caramel">
+                  Award Evidence
+                </p>
+                <h2 className="type-korean-title mt-4 text-4xl leading-tight text-espresso sm:text-5xl">
+                  {project.detailAward.title}
+                </h2>
+                <p className="mt-6 max-w-xl text-[16px] leading-[1.9] text-coffee">
+                  {project.detailAward.desc}
+                </p>
+                <div className="mt-8 flex flex-wrap gap-2">
+                  {["IPACT", "우수논문상", "Research Presentation"].map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-full border border-caramel/35 bg-caramel/10 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-caramel"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <motion.figure
+                whileHover={{ y: -8, rotate: 0.25 }}
+                transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+                className="overflow-hidden rounded-[1.6rem] border border-sand bg-cream p-3 shadow-[0_34px_84px_-58px_rgba(74,58,44,0.78)]"
+              >
+                <div className="rounded-[1.25rem] bg-white p-3 ring-1 ring-sand/80">
+                  <img
+                    src={project.detailAward.src}
+                    alt={project.detailAward.title}
+                    loading="lazy"
+                    className="mx-auto max-h-[720px] w-full object-contain"
+                  />
+                </div>
+                <figcaption className="px-2 pb-1 pt-4 text-[13px] leading-relaxed text-coffee">
+                  국내학술대회 발표 이후 우수논문으로 선정된 결과를 증빙하는 상장입니다.
+                </figcaption>
+              </motion.figure>
+            </Reveal>
+          </div>
+        </section>
+      )}
+
       {project.gallery && project.gallery.length > 0 && (
         <section className="px-5 py-16 sm:px-10 sm:py-24 lg:px-16 xl:px-20">
           <div className="mx-auto max-w-[1280px]">

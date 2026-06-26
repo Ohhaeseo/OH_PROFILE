@@ -11,6 +11,16 @@ export type Project = {
   summary: string;
   highlights: string[];
   cover: string;
+  extraCover?: {
+    src: string;
+    label: string;
+    caption: string;
+  };
+  detailAward?: {
+    src: string;
+    title: string;
+    desc: string;
+  };
   gallery?: string[];
   link?: { label: string; href: string };
   featured: boolean;
@@ -100,7 +110,7 @@ export const projects: Project[] = [
     subtitle: "DSPy 기반 광고 영상 프롬프트 생성 프레임워크 연구",
     year: "2025 · JCCT 등재",
     role: "연구 · 프롬프트 설계 · 실험 · 평가",
-    award: "Main Project",
+    award: "우수논문상",
     tags: ["DSPy", "Vertex AI · VEO", "CLIP", "Gemini VQA", "AIDA"],
     keywords: ["DSPy", "AIDA Structure", "VQA Evaluation", "Ad Prompt"],
     summary:
@@ -111,6 +121,17 @@ export const projects: Project[] = [
       "CLIP은 의미 정합성, VQA는 광고 구조 반영도를 평가하도록 분리해 결과를 해석했습니다.",
     ],
     cover: `${A}/jcct-dspy-paper.png`,
+    extraCover: {
+      src: `${A}/ipact-presentation.webp`,
+      label: "IPACT 2026",
+      caption:
+        "국내학술대회 현장에서 광고 장면 구조 분석 기반 DSPy 프롬프트 생성 프레임워크를 발표했습니다.",
+    },
+    detailAward: {
+      src: `${A}/ipact-award.webp`,
+      title: "IPACT 국내학술대회 우수논문상",
+      desc: "2026년 6월 26일, 광고 장면 구조 분석 기반 DSPy 프롬프트 생성 프레임워크 연구로 우수논문상을 수상했습니다.",
+    },
     featured: true,
   },
   {
